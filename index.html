@@ -248,6 +248,35 @@ p.sec-label.new { color:var(--accent); margin:0 0 14px; }
   100% { background-color:rgba(110,231,183,0); color:var(--code-accent); }
 }
 
+/* ---------- merge bar (slide 10): 3 source segments slide together and dock flush against the model segment ---------- */
+.merge-bar { display:flex; margin-top:30px; height:130px; position:relative; }
+.seg { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; flex:1 1 0; text-align:center; padding:10px; }
+.seg svg { width:34px; height:34px; }
+.seg .lbl { font-weight:700; font-size:13.5px; line-height:1.3; }
+.seg-src { background:var(--card); border-top:1px solid var(--card-line); border-bottom:1px solid var(--card-line); }
+.seg-src svg { stroke:var(--accent); }
+.seg-src .lbl { color:var(--card-ink); }
+.seg-src.s1 { border-left:1px solid var(--card-line); border-radius:16px 0 0 16px; }
+.seg-src.s3 { border-right:1px solid var(--card-line); }
+.seg-model { background:var(--accent); color:#fff; border-radius:0 16px 16px 0; flex:1.15 1 0; }
+.seg-model .lbl { font-size:15px; }
+.connector { position:absolute; top:50%; width:26px; height:26px; border-radius:50%; background:var(--bg); border:1.5px solid var(--accent);
+  display:flex; align-items:center; justify-content:center; z-index:2; }
+.connector svg { width:13px; height:13px; }
+.connector.c1 { left:24.1%; } .connector.c2 { left:48.2%; } .connector.c3 { left:72.3%; }
+@media (prefers-reduced-motion: no-preference) {
+  .merge-bar.go .s1 { transform:translateX(-46px); animation:closeGap .5s cubic-bezier(.22,.61,.36,1) .1s forwards; }
+  .merge-bar.go .s2 { transform:translateX(-24px); animation:closeGap .5s cubic-bezier(.22,.61,.36,1) .38s forwards; }
+  .merge-bar.go .s3 { transform:translateX(-8px); animation:closeGap .5s cubic-bezier(.22,.61,.36,1) .66s forwards; }
+  .merge-bar.go .seg-model { animation:groundPulse .6s ease 1.0s; }
+  .merge-bar .connector { transform:translate(-50%,-50%) scale(0); }
+  .merge-bar.go .connector { animation:connIn .3s cubic-bezier(.34,1.56,.64,1) forwards; }
+  .merge-bar.go .c1 { animation-delay:.65s; } .merge-bar.go .c2 { animation-delay:.93s; } .merge-bar.go .c3 { animation-delay:1.21s; }
+}
+@keyframes closeGap { to { transform:translateX(0); } }
+@keyframes groundPulse { 40% { box-shadow:0 0 0 10px rgba(5,150,105,.18); } 100% { box-shadow:0 0 0 0 rgba(5,150,105,0); } }
+@keyframes connIn { to { transform:translate(-50%,-50%) scale(1); } }
+
 /* ---------- two-column compare cards ---------- */
 .cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:22px; }
 .cols > * { min-width:0; }
@@ -630,16 +659,47 @@ body.notes-open .notes-panel { transform:translateY(0); }
       <h2 class="headline">Bring the right facts to the moment.</h2>
       <div class="tick"></div>
       <p class="body-text tight">A brilliant analyst with no access to your files can only guess. Give them the schema, the ticket, last release's defects, and now they are useful. Context engineering is getting the right information in front of the model at the right time.</p>
-      <div class="flow" style="margin-top:24px;">
-        <span class="node">your docs</span>
-        <span class="node">database schema</span>
-        <span class="node">past defects</span>
-        <span class="arrow" aria-hidden="true">&rarr;</span>
-        <span class="node solid">the model, now grounded</span>
+      <div class="merge-bar anim-on-enter">
+        <div class="seg seg-src s1">
+          <svg viewBox="0 0 56 56" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8h16l8 8v32H16z"/><path d="M32 8v8h8"/>
+            <line x1="21" y1="28" x2="39" y2="28" stroke-width="2.5"/><line x1="21" y1="35" x2="39" y2="35" stroke-width="2.5"/><line x1="21" y1="42" x2="33" y2="42" stroke-width="2.5"/>
+          </svg>
+          <span class="lbl">Your docs</span>
+        </div>
+        <div class="seg seg-src s2">
+          <svg viewBox="0 0 56 56" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="28" cy="14" rx="15" ry="6"/><path d="M13 14v14c0 3.3 6.7 6 15 6s15-2.7 15-6V14"/><path d="M13 28v14c0 3.3 6.7 6 15 6s15-2.7 15-6V28"/>
+          </svg>
+          <span class="lbl">Database schema</span>
+        </div>
+        <div class="seg seg-src s3">
+          <svg viewBox="0 0 56 56" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <ellipse cx="28" cy="30" rx="12" ry="15"/><line x1="28" y1="15" x2="28" y2="45" stroke-width="2.5"/>
+            <line x1="12" y1="20" x2="18" y2="16" stroke-width="2.5"/><line x1="44" y1="20" x2="38" y2="16" stroke-width="2.5"/>
+            <line x1="10" y1="30" x2="17" y2="30" stroke-width="2.5"/><line x1="46" y1="30" x2="39" y2="30" stroke-width="2.5"/>
+            <line x1="12" y1="41" x2="18" y2="37" stroke-width="2.5"/><line x1="44" y1="41" x2="38" y2="37" stroke-width="2.5"/>
+            <line x1="22" y1="15" x2="20" y2="9" stroke-width="2.5"/><line x1="34" y1="15" x2="36" y2="9" stroke-width="2.5"/>
+          </svg>
+          <span class="lbl">Past defects</span>
+        </div>
+        <div class="seg seg-model">
+          <svg viewBox="0 0 56 56" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="16" y="16" width="24" height="24" rx="4"/>
+            <line x1="24" y1="8" x2="24" y2="16" stroke-width="2.5"/><line x1="32" y1="8" x2="32" y2="16" stroke-width="2.5"/>
+            <line x1="24" y1="40" x2="24" y2="48" stroke-width="2.5"/><line x1="32" y1="40" x2="32" y2="48" stroke-width="2.5"/>
+            <line x1="8" y1="24" x2="16" y2="24" stroke-width="2.5"/><line x1="8" y1="32" x2="16" y2="32" stroke-width="2.5"/>
+            <line x1="40" y1="24" x2="48" y2="24" stroke-width="2.5"/><line x1="40" y1="32" x2="48" y2="32" stroke-width="2.5"/>
+          </svg>
+          <span class="lbl">the model,<br>now grounded</span>
+        </div>
+        <div class="connector c1"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
+        <div class="connector c2"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
+        <div class="connector c3"><svg viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></div>
       </div>
       <p class="flow-cap">That is what "RAG", long context windows, and file access all quietly do. The term itself was coined in 2025 as prompting matured (Karpathy and others).</p>
     </div>
-    <aside class="notes" hidden>Define the one acronym on the slide out loud: RAG just means the system fetches relevant documents and hands them to the model alongside your question, retrieval-augmented generation, but you can honestly just say "it looks things up first". The analogy that lands: a new hire who is brilliant but has not been given the wiki login. Same model, transformed output, purely because of what you put in front of it. Context engineering as a named discipline emerged mid-2025, Karpathy popularised the phrase, Anthropic formalised it that September, you do not need those names on the slide unless asked.</aside>
+    <aside class="notes" hidden>Define the one acronym on the slide out loud: RAG just means the system fetches relevant documents and hands them to the model alongside your question, retrieval-augmented generation, but you can honestly just say "it looks things up first". The analogy that lands: a new hire who is brilliant but has not been given the wiki login. Same model, transformed output, purely because of what you put in front of it. Let the bar animate before you talk over it, docs, schema, and defects each slide into place and the connector arrows light up as each one locks in, ending as one continuous bar with the model as its own segment, chip icon included, that is the picture: three sources now joined with the model. Context engineering as a named discipline emerged mid-2025, Karpathy popularised the phrase, Anthropic formalised it that September, you do not need those names on the slide unless asked.</aside>
   </section>
 
   <!-- 11 · Context example -->
