@@ -29,7 +29,7 @@ Works with a presentation clicker (they send PageUp/PageDown).
 - **III - Landscape & Trajectory** (15-18): the tool landscape, the model landscape, AI in BI/QA, where it's heading
 - **IV - What This Means** (19-22): three shifts in the QA role, the build, and the close
 
-Deep (dark) slides: 1, 7, 14, 19, 22. Everything else is light.
+Deep (dark) slides: 1, 7, 11, 14, 19, 22. Everything else is light. The dark/light rhythm is under active review as part of an end-of-build visual pass (see git log) and this list may grow.
 
 ## Edit it
 

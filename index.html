@@ -289,6 +289,22 @@ p.sec-label.new { color:var(--accent); margin:0 0 14px; }
 .col.good .out { color:var(--card-ink); }
 @media (max-width:820px){ .cols{ grid-template-columns:1fr; } }
 
+/* ---------- flat vs vivid compare cards (slide 11, dark): color lives only on the "vivid" side ---------- */
+.col-badge { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+.col-badge svg { width:22px; height:22px; }
+.col.flat { border:none; background:#eef0ee; }
+.col.flat h4 { color:#64748b; }
+.col.flat p { color:#0f172a; }
+.col.flat .out { color:#64748b; }
+.col.flat .col-badge { background:#dcdfdd; }
+.col.flat .col-badge svg { stroke:#64748b; }
+.col.vivid { border:none; background:var(--deep-accent); }
+.col.vivid h4 { color:#022c22; opacity:.72; }
+.col.vivid p { color:#022c22; font-weight:500; }
+.col.vivid .out { color:#022c22; opacity:.8; }
+.col.vivid .col-badge { background:#022c22; }
+.col.vivid .col-badge svg { stroke:var(--deep-accent); }
+
 /* ---------- verify-reveal cards (hallucination slide): two answers look identical until the reveal ---------- */
 .verify-prompt { font-size:14px; color:var(--muted); font-weight:600; margin:20px 0 10px; }
 .col.verify { background:#fff; border-color:var(--line); color:var(--ink); }
@@ -703,18 +719,32 @@ body.notes-open .notes-panel { transform:translateY(0); }
   </section>
 
   <!-- 11 · Context example -->
-  <section class="slide" data-index="11" data-act="2">
+  <section class="slide deep" data-index="11" data-act="2">
     <div class="slide-inner">
       <p class="eyebrow">Era 2 &middot; In practice</p>
       <h2 class="headline">Grounded beats clever.</h2>
       <p class="body-text tight" style="margin-bottom:4px;">Ask: <em>"Why did last night's data load fail?"</em></p>
       <div class="cols">
-        <div class="col">
+        <div class="col flat">
+          <div class="col-badge">
+            <svg viewBox="0 0 56 56" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 22c0-4.5 3.5-8 7-8s7 3 7 6.5c0 4.5-4.5 5.5-6.5 9-.7 1.2-.5 2.5-.5 3.5"/>
+              <circle cx="28" cy="40" r="1.6" fill="#64748b" stroke="none"/>
+            </svg>
+          </div>
           <h4>No context</h4>
           <p>Generic, plausible guesses.</p>
           <p class="out">"Maybe a timeout, or bad input data, or a permissions issue."</p>
         </div>
-        <div class="col good">
+        <div class="col vivid">
+          <div class="col-badge">
+            <svg viewBox="0 0 56 56" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="28" cy="10" r="4"/>
+              <line x1="28" y1="14" x2="28" y2="42"/>
+              <line x1="19" y1="21" x2="37" y2="21"/>
+              <path d="M14 29c0 8.3 6.3 15 14 15s14-6.7 14-15"/>
+            </svg>
+          </div>
           <h4>With the log + config + last week's tickets</h4>
           <p>Specific, checkable answer.</p>
           <p class="out">"Row 40k broke the date format the load step expects. Same as ticket 812."</p>
@@ -722,7 +752,7 @@ body.notes-open .notes-panel { transform:translateY(0); }
       </div>
       <p class="flow-cap">Same model, same question. The only thing that changed is what it could see.</p>
     </div>
-    <aside class="notes" hidden>This is the slide that makes context engineering concrete for a BI and QA room, because everyone has debugged a failed load. The left answer is not wrong, it is just useless: it is what you would get from a model with no access. The right answer names the row and points at a prior ticket, because those things were in front of it. Stress that nobody wrote a cleverer prompt here, they just fed it the evidence. That is the whole move.</aside>
+    <aside class="notes" hidden>This is the slide that makes context engineering concrete for a BI and QA room, because everyone has debugged a failed load. The left answer is not wrong, it is just useless: it is what you would get from a model with no access. The right answer names the row and points at a prior ticket, because those things were in front of it. Stress that nobody wrote a cleverer prompt here, they just fed it the evidence. That is the whole move. Visually this is the slide that first breaks the fixed light/dark rhythm, flagged for the end-of-build visual pass to rebalance across the whole deck.</aside>
   </section>
 
   <!-- 12 · Era 3: Loop / agents -->
