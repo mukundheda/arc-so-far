@@ -23,6 +23,7 @@
   --card:#d1fae5; --card-ink:#0f172a; --card-line:#a7f3d0;
   --code-bg:#0f172a; --code-ink:#e2e8f0; --code-accent:#6ee7b7;
   --amber:#c2740c;
+  --bad:#b91c1c; --bad-bg:#fee2e2; --bad-line:#fecaca;
   --deep-ghost:#04694a; --deep-accent:#6ee7b7;
   --sans:'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --mono:ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
@@ -81,12 +82,15 @@ p { margin:0; }
 .foot { font-size:14px; color:var(--muted); margin-top:22px; max-width:800px; }
 .spine { font-weight:700; }
 .footer-chain { position:absolute; left:clamp(28px,8vw,120px); bottom:92px; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); font-weight:600; z-index:2; }
+.footer-chain.right-align { left:auto; right:clamp(28px,8vw,120px); text-align:right; }
 
 /* ---------- arc signature (title/close) ---------- */
 .arc-sig { position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; }
 .arc-sig .arc-line { fill:none; stroke:var(--deep-ghost); stroke-width:2.5; }
 .arc-sig .arc-now { fill:var(--deep-accent); }
 .arc-sig .arc-lbl { fill:var(--deep-accent); font-family:var(--sans); font-size:13px; font-weight:600; letter-spacing:.08em; }
+.arc-sig .mile-ghost { fill:none; stroke:var(--deep-accent); stroke-width:2; opacity:.9; }
+.arc-sig .mile-yr { fill:rgba(255,255,255,.52); font-family:var(--sans); font-size:13px; font-weight:600; letter-spacing:.05em; }
 
 /* ---------- flow-chain diagram (pills + arrows) ---------- */
 .flow { display:flex; align-items:center; flex-wrap:wrap; gap:12px 10px; margin:8px 0 4px; }
@@ -116,6 +120,86 @@ p { margin:0; }
 .svg-diagram .d-arrow-head { fill:var(--muted); }
 .svg-diagram .d-loop-lbl { fill:var(--accent); font-family:var(--sans); font-size:13px; font-weight:600; letter-spacing:.04em; }
 
+/* ---------- next-word loop diagram (LLM basics slide): boxes cascade in, arrows draw after each box lands ---------- */
+.svg-diagram .d-box { opacity:1; }
+.svg-diagram .d-arrow.anim, .svg-diagram .d-arrow-head.anim, .svg-diagram .d-loop-lbl.anim { opacity:1; }
+@media (prefers-reduced-motion: no-preference) {
+  .svg-diagram.go .d-box { opacity:0; transform:translateY(6px); animation:dBoxIn .35s ease forwards; }
+  .svg-diagram .d-arrow.anim { stroke-dasharray:1; stroke-dashoffset:1; }
+  .svg-diagram.go .d-arrow.anim { animation:drawArc .35s ease forwards; }
+  .svg-diagram.go .a3.d-arrow { animation-duration:.55s; }
+  .svg-diagram.go .d-arrow-head.anim { opacity:0; animation:hopIn .18s ease forwards; }
+  .svg-diagram.go .d-loop-lbl.anim { opacity:0; animation:hopIn .3s ease forwards; }
+  .svg-diagram .b1 { animation-delay:0s!important; }
+  .svg-diagram .a1 { animation-delay:.22s!important; }
+  .svg-diagram .ah1 { animation-delay:.52s!important; }
+  .svg-diagram .b2 { animation-delay:.48s!important; }
+  .svg-diagram .a2 { animation-delay:.70s!important; }
+  .svg-diagram .ah2 { animation-delay:1.00s!important; }
+  .svg-diagram .b3 { animation-delay:.96s!important; }
+  .svg-diagram .a3 { animation-delay:1.18s!important; }
+  .svg-diagram .ah3 { animation-delay:1.68s!important; }
+  .svg-diagram .lbl { animation-delay:1.90s!important; }
+}
+@keyframes dBoxIn { to { opacity:1; transform:translateY(0); } }
+
+/* ---------- attention diagram (transformer slide): arcs draw together, relay fades in hop-by-hop ---------- */
+.diagram-box { border:1px solid var(--line); border-radius:14px; padding:18px 26px 14px; margin-top:16px; }
+.attn-diagram { width:100%; height:auto; display:block; }
+p.sec-label { font-family:var(--sans); font-size:11.5px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin:0 0 4px; }
+p.sec-label.old { color:var(--muted); }
+p.sec-label.new { color:var(--accent); margin:0 0 14px; }
+.attn-diagram .word { font-family:var(--sans); font-size:17px; font-weight:600; fill:var(--muted); text-anchor:middle; }
+.attn-diagram .word.focus { fill:var(--ink); font-weight:800; }
+.attn-diagram .word.answer { fill:var(--accent); font-weight:800; }
+.attn-diagram .word.clue { fill:var(--ink); font-weight:700; }
+.d-cap { font-size:14px; color:var(--ink); margin-top:10px; line-height:1.5; max-width:820px; }
+.d-cap b { color:var(--accent); font-weight:700; }
+.d-cap .decoy { color:var(--ink); font-weight:700; text-decoration:underline; text-decoration-color:var(--line); text-underline-offset:3px; }
+.diagram-box .hop { opacity:var(--o,1); }
+@media (prefers-reduced-motion: no-preference) {
+  .diagram-box .arc { stroke-dasharray:1; stroke-dashoffset:1; }
+  .diagram-box.go .arc { animation:drawArc .55s ease forwards; }
+  .diagram-box .hop { opacity:0; }
+  .diagram-box.go .hop { animation:hopIn .22s ease forwards; }
+  .h1{ animation-delay:0s!important; } .h2{ animation-delay:.13s!important; } .h3{ animation-delay:.26s!important; }
+  .h4{ animation-delay:.39s!important; } .h5{ animation-delay:.52s!important; } .h6{ animation-delay:.65s!important; }
+  .h7{ animation-delay:.78s!important; } .h8{ animation-delay:.91s!important; } .h9{ animation-delay:1.04s!important; }
+  .h10{ animation-delay:1.17s!important; }
+}
+@keyframes drawArc { to { stroke-dashoffset:0; } }
+@keyframes hopIn { to { opacity:var(--o,1); } }
+
+/* ---------- shift diagram (ChatGPT slide): narrow-tool chips collapse into one chat window ---------- */
+.shift-row { display:flex; align-items:center; gap:22px; flex-wrap:wrap; margin-top:20px; }
+.cluster { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+.chip-plain { padding:9px 14px; border:1px solid var(--line); border-radius:999px; font-size:14px; font-weight:600; color:var(--muted); background:transparent; }
+.chip-code { font-family:var(--mono); font-size:12px; font-weight:400; color:var(--code-ink); background:var(--code-bg); border-color:var(--code-bg); border-radius:8px; padding:8px 12px; }
+.chip-code .k { color:var(--code-accent); }
+.arrow-big { color:var(--muted); font-size:26px; flex-shrink:0; }
+.chatwin { width:340px; border:1px solid var(--card-line); border-radius:14px; background:#fff; overflow:hidden; box-shadow:0 8px 24px rgba(15,23,42,.08); }
+.chatwin .chead { display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--line); }
+.chatwin .chead span { font-size:12.5px; font-weight:700; color:var(--ink); }
+.chatwin .chead img { display:block; }
+.chatwin .cbody { padding:16px 14px; min-height:56px; display:flex; align-items:center; }
+.chatwin .cbody .placeholder-echo { font-size:13px; color:var(--muted); }
+.chatwin .cinput { margin:0 14px 14px; border:1px solid var(--card-line); background:var(--card); border-radius:999px; padding:9px 14px; font-size:13px; color:var(--muted); }
+.chatwin .cinput .caret { display:inline-block; width:1px; height:13px; background:var(--accent); vertical-align:middle; margin-left:2px; }
+.shift-diagram .su { opacity:1; }
+.shift-diagram .typewriter { display:inline-block; overflow:hidden; white-space:nowrap; width:15ch; vertical-align:bottom; }
+@media (prefers-reduced-motion: no-preference) {
+  .shift-diagram .su { opacity:0; transform:translateY(10px); }
+  .shift-diagram.go .su { animation:shiftPop .4s cubic-bezier(.22,.61,.36,1) forwards; }
+  .shift-diagram .s1{ animation-delay:.05s; } .shift-diagram .s2{ animation-delay:.16s; } .shift-diagram .s3{ animation-delay:.27s; }
+  .shift-diagram .s4{ animation-delay:.38s; } .shift-diagram .s5{ animation-delay:.45s; } .shift-diagram .s-chatwin{ animation-delay:.55s; }
+  .shift-diagram .typewriter{ width:0; }
+  .shift-diagram.go .typewriter{ animation:shiftType 1.1s steps(22,end) .95s forwards; }
+  .chatwin .cinput .caret { animation:shiftBlink 1s steps(1) infinite; }
+}
+@keyframes shiftPop { to { opacity:1; transform:translateY(0); } }
+@keyframes shiftType { to { width:15ch; } }
+@keyframes shiftBlink { 50% { opacity:0; } }
+
 /* ---------- ingredient chips ---------- */
 .chips { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
 .chip { padding:9px 15px; border:1px solid var(--card-line); background:var(--card); color:var(--card-ink); border-radius:999px; font-size:clamp(13px,1.3vw,16px); font-weight:600; }
@@ -142,6 +226,24 @@ p { margin:0; }
 .col .out { font-family:var(--mono); font-size:13px; margin-top:8px; color:var(--muted); }
 .col.good .out { color:var(--card-ink); }
 @media (max-width:820px){ .cols{ grid-template-columns:1fr; } }
+
+/* ---------- verify-reveal cards (hallucination slide): two answers look identical until the reveal ---------- */
+.verify-prompt { font-size:14px; color:var(--muted); font-weight:600; margin:20px 0 10px; }
+.col.verify { background:#fff; border-color:var(--line); color:var(--ink); }
+.col.verify .vout { font-size:15px; line-height:1.5; color:var(--ink); margin:0; }
+.col.verify .vbadge { display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px; margin-bottom:10px; opacity:0; transform:translateY(-4px); }
+.col.verify .vbadge.ok { background:var(--accent); color:#fff; }
+.col.verify .vbadge.no { background:var(--bad); color:#fff; }
+@media (prefers-reduced-motion: no-preference) {
+  .verify-set .col.verify { opacity:0; transform:translateY(8px); }
+  .verify-set.go .col.verify.good { animation:vCardIn .35s ease forwards, revealGood .3s ease forwards .6s; }
+  .verify-set.go .col.verify.bad { animation:vCardIn .35s ease forwards, revealBad .3s ease forwards .6s; }
+  .verify-set.go .col.verify .vbadge { animation:vBadgeIn .3s ease forwards .6s; }
+}
+@keyframes vCardIn { to { opacity:1; transform:translateY(0); } }
+@keyframes revealGood { to { background:var(--card); border-color:var(--card-line); } }
+@keyframes revealBad { to { background:var(--bad-bg); border-color:var(--bad-line); } }
+@keyframes vBadgeIn { to { opacity:1; transform:translateY(0); } }
 
 /* ---------- card grid (tools/BI) ---------- */
 .card-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; margin-top:22px; }
@@ -220,19 +322,27 @@ body.notes-open .notes-panel { transform:translateY(0); }
 <div class="deck" id="deck">
 
   <!-- 1 · TITLE -->
-  <section class="slide active deep center" data-index="1" data-act="0">
+  <section class="slide active deep" data-index="1" data-act="0">
     <svg class="arc-sig" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <path class="arc-line" d="M110,632 C470,612 780,548 1012,150" />
-      <circle class="arc-now" cx="1012" cy="150" r="7" />
-      <text class="arc-lbl" x="1012" y="130" text-anchor="end">2026 &middot; you are here</text>
+      <path class="arc-line" d="M110,650 C560,655 880,560 1140,130" />
+      <circle class="mile-ghost" cx="365" cy="639" r="6"/>
+      <text class="mile-yr" x="365" y="666" text-anchor="middle">Jun 2017</text>
+      <circle class="mile-ghost" cx="644" cy="574" r="6"/>
+      <text class="mile-yr" x="644" y="601" text-anchor="middle">Nov 2022</text>
+      <circle class="mile-ghost" cx="888" cy="433" r="6"/>
+      <text class="mile-yr" x="915" y="438" text-anchor="start">Nov 2023</text>
+      <circle class="mile-ghost" cx="1044" cy="271" r="6"/>
+      <text class="mile-yr" x="1071" y="276" text-anchor="start">2025</text>
+      <circle class="arc-now" cx="1140" cy="130" r="7" />
+      <text class="arc-lbl" x="1140" y="108" text-anchor="end">2026 &middot; we are here</text>
     </svg>
     <div class="slide-inner">
-      <p class="eyebrow">A working briefing for the QA team &middot; July 23, 2026</p>
+      <p class="eyebrow">A working briefing for the QA team &middot; July 22, 2026</p>
       <h1 class="hero">The Arc<br>So Far</h1>
-      <p class="hook">Prompting, context, and now agents that check their own work: the same three shifts already reach into test-case review, SQL, and defect triage.</p>
+      <p class="hook">Prompting, context, and now agents that check their own work: the same three shifts already reach into how we review test cases, reconcile data, and sign off on reports.</p>
     </div>
-    <div class="footer-chain">Narrow ML &middot; Prompting &middot; Context &middot; Agents</div>
-    <aside class="notes" hidden>Open warm, not a hard launch into content: "Before the demo, I want fifteen minutes on the bigger picture, because the tool only makes sense once you see how fast this moved." The arc behind me is the whole talk: bottom-left is narrow ML before 2022, and it climbs to where we are now. Read the hook slowly and let it land before advancing. This deck is for everyone in the room, whether you write tests or drive the quality standards.</aside>
+    <div class="footer-chain right-align">Narrow ML &middot; Prompting &middot; Context &middot; Agents</div>
+    <aside class="notes" hidden>Open warm, not a hard launch into content: "Before the demo, I want fifteen minutes on the bigger picture, because the tool only makes sense once you see how fast this moved." The arc behind me is the whole talk: bottom-left is narrow ML before 2022, and it climbs to where we are now. The four dots along the curve mark the beats in the footer chain below; the first (Jun 2017) is explained two slides from now, the other three (Nov 2022, Nov 2023, 2025) don't have dedicated slides yet. Do not dwell on their dates here, just let the shape read as acceleration. Read the hook slowly and let it land before advancing. This deck is for everyone in the room, whether you write tests or drive the quality standards.</aside>
   </section>
 
   <!-- 2 · Pre-ChatGPT -->
@@ -241,7 +351,7 @@ body.notes-open .notes-panel { transform:translateY(0); }
       <p class="eyebrow">Foundations &middot; Before the moment</p>
       <h2 class="headline">AI was already everywhere. It just didn't talk back.</h2>
       <div class="tick"></div>
-      <p class="body-text tight">For years, "AI" meant a narrow tool trained for one job: flag the spam, rank the feed, read the postcode. Each was invisible, baked into a product, and useless the moment you pointed it at anything else. There was no general capability you could just ask.</p>
+      <p class="body-text tight">For years, "AI" meant a narrow tool trained for one job: flag the spam, rank the feed, read the zip code. Each was invisible, baked into a product, and useless the moment you pointed it at anything else. There was no general capability you could just ask.</p>
       <div class="chips">
         <span class="chip">Spam filter</span>
         <span class="chip">Recommendation feed</span>
@@ -250,75 +360,141 @@ body.notes-open .notes-panel { transform:translateY(0); }
       </div>
       <p class="flow-cap">Powerful, but each one stuck in its own lane. None of them could be handed a brand-new problem.</p>
     </div>
-    <aside class="notes" hidden>The point to make: AI is not new, it has been running quietly for two decades. What people mean by "AI happened in 2022" is really "AI became general and conversational." Use a room example if you have one: the spam filter that quietly sorted your inbox was machine learning, nobody called it AI. Keep this slide short, it is scene-setting. Do not get pulled into a history-of-ML tangent.</aside>
+    <aside class="notes" hidden>The point to make: AI is not new, it has been running quietly for two decades. What people mean by "AI happened in 2022" is really "AI became general and conversational." Use a room example if you have one: the spam filter that quietly sorted your inbox was machine learning, nobody called it AI. Keep this slide short, it is scene-setting. Do not get pulled into a history-of-ML tangent. The next slide picks up the thread: the architecture behind all of this, the transformer, was actually published in June 2017, five years before ChatGPT made any of it visible.</aside>
   </section>
 
-  <!-- 3 · ChatGPT moment -->
+  <!-- 3 · The transformer -->
   <section class="slide" data-index="3" data-act="1">
     <div class="slide-inner">
-      <p class="eyebrow">Foundations &middot; The shift</p>
-      <h2 class="headline">AI stopped being invisible.</h2>
+      <p class="eyebrow">Foundations &middot; The quiet ingredient</p>
+      <h2 class="headline">Published years early, noticed years late.</h2>
       <div class="tick"></div>
-      <p class="body-text">ChatGPT, released November 2022, was the first time a general model was something anyone could just open and talk to. No setup, no specialist. That access, not one breakthrough, is what changed.</p>
-      <div class="flow" style="margin-top:26px;">
-        <span class="node plain">spell-check</span>
-        <span class="node plain">spam filter</span>
-        <span class="node plain">recommendations</span>
-        <span class="arrow" aria-hidden="true">&rarr;</span>
-        <span class="node solid">one model, anyone can talk to</span>
+      <p class="body-text tight">Google's <em>"Attention Is All You Need"</em> (Vaswani et al., June 2017) changed how a model connects the words in a sentence, five years before anyone outside research noticed.</p>
+      <div class="diagram-box anim-on-enter">
+        <p class="sec-label old">OLD &middot; SEQUENTIAL MODELS &middot; one word at a time, memory fades with distance</p>
+        <p class="sec-label new">NEW &middot; TRANSFORMER, 2017 &middot; weighs every word, all at once</p>
+        <svg class="attn-diagram" viewBox="0 0 900 155" role="img" aria-label="Same sentence shown two ways: attention arcs above connect it directly to animal despite distance; the sequential relay below passes information one word at a time and loses the connection along the way">
+          <path class="arc" pathLength="1" d="M612,88 C551,60 521,60 460,88" stroke="var(--muted)" stroke-width="1.6" fill="none" opacity="0.4"/>
+          <path class="arc" pathLength="1" d="M612,88 C692,44 760,44 840,88" stroke="var(--accent)" stroke-width="2.2" fill="none" opacity="0.55"/>
+          <path class="arc" pathLength="1" d="M612,88 C500,16 268,16 156,88" stroke="var(--accent)" stroke-width="3.6" fill="none" opacity="0.95"/>
+          <text class="word" x="80" y="118">The</text>
+          <text class="word answer" x="156" y="118">animal</text>
+          <text class="word" x="232" y="118">didn't</text>
+          <text class="word" x="308" y="118">cross</text>
+          <text class="word" x="384" y="118">the</text>
+          <text class="word" x="460" y="118">street</text>
+          <text class="word" x="536" y="118">because</text>
+          <text class="word focus" x="612" y="118">it</text>
+          <text class="word" x="688" y="118">was</text>
+          <text class="word" x="764" y="118">too</text>
+          <text class="word clue" x="840" y="118">tired</text>
+          <g stroke="var(--muted)" stroke-width="1.6">
+            <g class="hop h1" style="--o:0.55"><line x1="90" y1="140" x2="146" y2="140"/><polygon points="146,136 154,140 146,144" fill="var(--muted)"/></g>
+            <g class="hop h2" style="--o:0.55"><line x1="166" y1="140" x2="222" y2="140"/><polygon points="222,136 230,140 222,144" fill="var(--muted)"/></g>
+            <g class="hop h3" style="--o:0.55"><line x1="242" y1="140" x2="298" y2="140"/><polygon points="298,136 306,140 298,144" fill="var(--muted)"/></g>
+            <g class="hop h4" style="--o:0.55"><line x1="318" y1="140" x2="374" y2="140"/><polygon points="374,136 382,140 374,144" fill="var(--muted)"/></g>
+            <g class="hop h5" style="--o:0.55"><line x1="394" y1="140" x2="450" y2="140"/><polygon points="450,136 458,140 450,144" fill="var(--muted)"/></g>
+            <g class="hop h6" style="--o:0.55"><line x1="470" y1="140" x2="526" y2="140"/><polygon points="526,136 534,140 526,144" fill="var(--muted)"/></g>
+            <g class="hop h7" style="--o:0.55"><line x1="546" y1="140" x2="602" y2="140"/><polygon points="602,136 610,140 602,144" fill="var(--muted)"/></g>
+          </g>
+          <g class="hop h8" style="--o:0.30"><line x1="622" y1="140" x2="678" y2="140" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="4 4"/><polygon points="678,136 686,140 678,144" fill="var(--muted)"/></g>
+          <g class="hop h9" style="--o:0.18"><line x1="698" y1="140" x2="754" y2="140" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="4 4"/><polygon points="754,136 762,140 754,144" fill="var(--muted)"/></g>
+          <g class="hop h10" style="--o:0.10"><line x1="774" y1="140" x2="830" y2="140" stroke="var(--muted)" stroke-width="1.6" stroke-dasharray="4 4"/></g>
+        </svg>
+        <p class="d-cap">Same sentence, two mechanisms. Older models pass a memory forward one word at a time, so by "it" the trace of <span class="decoy">animal</span>, five words back, has faded. The transformer looks at every word directly: it still links <b>it</b> most strongly to <b>animal</b> and to the clue <b>tired</b>, however far apart they sit.</p>
       </div>
-      <p class="flow-cap">It reached an estimated 100 million users in about two months, faster than TikTok or Instagram (UBS analysis, early 2023).</p>
+      <p class="foot">Sentence and attention pattern per Jay Alammar, "The Illustrated Transformer" (2018), illustrating Vaswani et al., "Attention Is All You Need," Google, arXiv, 12 June 2017.</p>
     </div>
-    <aside class="notes" hidden>Land the contrast: AI was everywhere before 2022, we just never called it "the AI moment" because it was buried inside features. Point at the grey pills, all shipped years earlier. The green pill is the difference: one thing, general, open to everyone. The 100-million-in-two-months figure is from a UBS analysis reported by Reuters in Feb 2023, for comparison TikTok took about nine months and Instagram over two years. If asked for the source, that is it.</aside>
+    <aside class="notes" hidden>This slide can move quickly, it is one idea: the mechanism was old, the noticing was late. The diagram animates on entry, attention arcs above the sentence draw together almost instantly, the sequential relay below fades in hop by hop and dies out before reaching "it", let that timing difference do the talking rather than narrating every arc. The pedagogical point, if pressed: "street" sits right next to "it" in the sentence, closer than "animal", yet the model correctly weighs it low, because meaning beats proximity. That is the whole reason this architecture scaled into everything that follows. Citation: Vaswani et al., "Attention Is All You Need," posted to arXiv (1706.03762) on 12 Jun 2017, presented at NeurIPS that December, authors all at Google at the time; the sentence and attention-pattern illustration is Jay Alammar's, "The Illustrated Transformer" (2018), the standard public explainer of this mechanism. This is also the direct citation for the Jun 2017 dot on the title slide's arc.</aside>
   </section>
 
-  <!-- 4 · What LLMs are -->
+  <!-- 4 · ChatGPT moment -->
   <section class="slide" data-index="4" data-act="1">
+    <div class="slide-inner">
+      <p class="eyebrow">Foundations &middot; The shift</p>
+      <h2 class="headline">Many narrow tools became one open one.</h2>
+      <div class="tick"></div>
+      <p class="body-text">ChatGPT, released November 30, 2022, didn't add a new capability so much as remove the fences around all of them: one general model, in a chat window, that anyone could just ask.</p>
+      <div class="shift-row shift-diagram anim-on-enter">
+        <div class="cluster">
+          <span class="chip-plain su s1">spell-check</span>
+          <span class="chip-plain su s2">spam filter</span>
+          <span class="chip-code su s3">if <span class="k">score</span> &gt; 0.9: <span class="k">flag()</span></span>
+          <span class="chip-plain su s4">recommendations</span>
+        </div>
+        <span class="arrow-big su s5" aria-hidden="true">&rarr;</span>
+        <div class="chatwin su s-chatwin">
+          <div class="chead">
+            <img width="18" height="18" alt="ChatGPT" src="data:image/png;base64,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" />
+            <span>ChatGPT</span>
+          </div>
+          <div class="cbody"><span class="placeholder-echo">Ask it literally anything.</span></div>
+          <div class="cinput"><span class="typewriter">Message ChatGPT...</span><span class="caret"></span></div>
+        </div>
+      </div>
+      <p class="flow-cap">Same underlying idea as slide 2's chips, spam filter, fraud detection, and the rest, just one open door instead of many locked ones.</p>
+    </div>
+    <aside class="notes" hidden>Land the contrast: AI was everywhere before 2022 (see slide 2), we just never called it "the AI moment" because it was buried inside features, one fixed job each, including simple rule-based code like the snippet shown here. ChatGPT's shift was not a capability leap, it was removing the walls: one general model, asked in plain language, in a window anyone can open. The empty space in the chat window is deliberate, point at it, that emptiness is the point, it is not built for any one task. If pressed for adoption numbers: it reached an estimated 100 million monthly users within about two months of its Nov 30, 2022 launch, per a UBS analyst note reported by Reuters (Feb 2023) citing Similarweb data (about 13 million unique visitors a day in January, more than double December). For comparison, TikTok took about nine months and Instagram about two and a half years to reach the same 100 million mark. That stat no longer has its own chart on this slide, it lives here as a talking point if asked "how fast did this really happen".</aside>
+  </section>
+
+  <!-- 5 · What LLMs are -->
+  <section class="slide" data-index="5" data-act="1">
     <div class="slide-inner">
       <p class="term-label">LLM &middot; Large Language Model</p>
       <h2 class="headline">A very good guesser, on repeat.</h2>
       <div class="tick"></div>
       <p class="body-text">A large language model does one thing: predict the most likely <em>next word</em>, given the text so far. Feed each guess back in and repeat. Paragraphs, working code, even conversation come out of that loop, run at massive scale.</p>
-      <svg class="svg-diagram" viewBox="0 0 760 190" role="img" aria-label="Diagram: text so far goes into the model, which predicts the next word, which feeds back in, repeating thousands of times.">
-        <rect class="d-rect" x="8" y="34" width="176" height="52" rx="10"/>
-        <text class="d-txt" x="96" y="66" text-anchor="middle">text so far</text>
-        <line class="d-arrow" x1="188" y1="60" x2="252" y2="60"/>
-        <polygon class="d-arrow-head" points="252,55 262,60 252,65"/>
-        <rect class="d-rect solid" x="266" y="34" width="150" height="52" rx="10"/>
-        <text class="d-txt on-solid" x="341" y="66" text-anchor="middle">the model</text>
-        <line class="d-arrow" x1="420" y1="60" x2="484" y2="60"/>
-        <polygon class="d-arrow-head" points="484,55 494,60 484,65"/>
-        <rect class="d-rect" x="498" y="34" width="176" height="52" rx="10"/>
-        <text class="d-txt" x="586" y="66" text-anchor="middle">next word</text>
-        <path class="d-arrow" d="M586,86 C586,150 96,150 96,92"/>
-        <polygon class="d-arrow-head" points="91,102 96,90 101,102"/>
-        <text class="d-loop-lbl" x="341" y="170" text-anchor="middle">feed the word back in, thousands of times over</text>
+      <svg class="svg-diagram anim-on-enter" viewBox="0 0 760 190" role="img" aria-label="Diagram: text so far goes into the model, which predicts the next word, which feeds back in, repeating thousands of times.">
+        <g class="d-box b1">
+          <rect class="d-rect" x="8" y="34" width="176" height="52" rx="10"/>
+          <text class="d-txt" x="96" y="66" text-anchor="middle">text so far</text>
+        </g>
+        <line class="d-arrow anim a1" pathLength="1" x1="188" y1="60" x2="252" y2="60"/>
+        <polygon class="d-arrow-head anim ah1" points="252,55 262,60 252,65"/>
+        <g class="d-box b2">
+          <rect class="d-rect solid" x="266" y="34" width="150" height="52" rx="10"/>
+          <text class="d-txt on-solid" x="341" y="66" text-anchor="middle">the model</text>
+        </g>
+        <line class="d-arrow anim a2" pathLength="1" x1="420" y1="60" x2="484" y2="60"/>
+        <polygon class="d-arrow-head anim ah2" points="484,55 494,60 484,65"/>
+        <g class="d-box b3">
+          <rect class="d-rect" x="498" y="34" width="176" height="52" rx="10"/>
+          <text class="d-txt" x="586" y="66" text-anchor="middle">next word</text>
+        </g>
+        <path class="d-arrow anim a3" pathLength="1" d="M586,86 C586,150 96,150 96,92"/>
+        <polygon class="d-arrow-head anim ah3" points="91,102 96,90 101,102"/>
+        <text class="d-loop-lbl anim lbl" x="341" y="170" text-anchor="middle">feed the word back in, thousands of times over</text>
       </svg>
     </div>
     <aside class="notes" hidden>This is the one slide worth pausing on if anyone looks lost, every later slide assumes it landed. The everyday analogy: predictive text on your phone keyboard, same idea, just far larger with the loop drawn here bolted on. Trace the loop with your finger once. The key word is repeat: the capability is an emergent property of doing something simple a huge number of times, it is not a stored database of answers. That single fact explains the next slide, hallucination.</aside>
   </section>
 
-  <!-- 5 · Hallucination + QA -->
-  <section class="slide" data-index="5" data-act="1">
+  <!-- 6 · Hallucination + QA -->
+  <section class="slide" data-index="6" data-act="1">
     <div class="slide-inner">
       <p class="term-label">Hallucination</p>
       <h2 class="headline">A confident guess is still a guess.</h2>
       <div class="tick"></div>
-      <p class="body-text">Because the model predicts plausible words, not verified facts, it can produce a fluent, well-formatted, completely wrong answer, and it won't flag the difference. It has no built-in sense of "I don't actually know this."</p>
-      <div class="flow" style="margin-top:26px;">
-        <span class="node">a plausible answer</span>
-        <span class="arrow" aria-hidden="true">&rarr;</span>
-        <span class="node gate">a human verifies</span>
-        <span class="arrow" aria-hidden="true">&rarr;</span>
-        <span class="node solid">a trusted result</span>
+      <p class="body-text">Because the model predicts plausible words, not verified facts, it can produce a fluent, well-formatted, completely wrong answer, and it won't flag the difference. Same question, same tone, same format below, only one answer is true.</p>
+      <p class="verify-prompt">Q: "How do I stop cheese from sliding off my pizza slice?"</p>
+      <div class="cols verify-set anim-on-enter">
+        <div class="col verify good">
+          <span class="vbadge ok">&#10003; correct</span>
+          <p class="vout">"Let the pizza rest for a minute or two after it comes out of the oven, so the cheese has time to set before you cut it."</p>
+        </div>
+        <div class="col verify bad">
+          <span class="vbadge no">&#10007; hallucinated</span>
+          <p class="vout">"You can also mix about &#8539; cup of non-toxic glue into the sauce, it gives the cheese something to stick to."</p>
+        </div>
       </div>
       <p class="flow-cap">For QA-critical work the rule is simple: the model drafts, a human still signs off. Skipping the middle step is exactly where the risk lives.</p>
+      <p class="foot">Real example: Google's AI Overviews (May 2024) pulled this from an 11-year-old joke comment on Reddit and presented it as serious advice.</p>
     </div>
-    <aside class="notes" hidden>This is the slide that earns you credibility with a QA room, because it names the failure mode instead of selling magic. The trap is that wrong answers look identical to right ones: same confident tone, same clean formatting. Analogy: an intern who never says "I am not sure", they always hand you something that looks finished. So you treat every output as a draft to be checked, never as ground truth. That green checkpoint in the middle is the whole reason our jobs do not disappear, hold that thought, it comes back in Act Two.</aside>
+    <aside class="notes" hidden>This is the slide that earns you credibility with a QA room, because it names the failure mode instead of selling magic. The trap is that wrong answers look identical to right ones: same confident tone, same clean formatting, right up until the reveal. The pizza example is real: Google's AI Overviews, May 2024, lifted an 11-year-old joke comment off Reddit suggesting glue to keep cheese from sliding off pizza, and repeated it as straight advice, no sarcasm detection, no source-quality check. If pressed for a higher-stakes version: in 2023 a lawyer's ChatGPT-drafted legal brief cited six court cases that do not exist anywhere, the lawyers even asked the model to confirm the cases were real and it confidently said yes, they were sanctioned $5,000 (Mata v. Avianca). Analogy: an intern who never says "I am not sure," they always hand you something that looks finished. So you treat every output as a draft to be checked, never as ground truth. That verification step is the whole reason our jobs do not disappear, hold that thought, it comes back in Act Two.</aside>
   </section>
 
-  <!-- 6 · Three eras overview -->
-  <section class="slide deep" data-index="6" data-act="2">
+  <!-- 7 · Three eras overview -->
+  <section class="slide deep" data-index="7" data-act="2">
     <div class="slide-inner">
       <p class="eyebrow">Act II &middot; The Three Eras</p>
       <h2 class="headline">Three eras, one throughline.</h2>
@@ -333,11 +509,11 @@ body.notes-open .notes-panel { transform:translateY(0); }
         <span>ask</span><span class="arrow" aria-hidden="true">&rarr;</span><span>inform</span><span class="arrow" aria-hidden="true">&rarr;</span><span>iterate</span>
       </div>
     </div>
-    <aside class="notes" hidden>This is the map for Act Two, put it up and promise the audience we will walk each one with a concrete QA example. The throughline to stress: nothing here replaces the model from the LLM slide, each era is just a smarter way of feeding it. Prompting is what you say, context is what you show it, loop is letting it act and correct. Say the words ask, inform, iterate out loud, that trio is the spine they should walk out remembering.</aside>
+    <aside class="notes" hidden>This is the map for Act Two, put it up and promise the audience we will walk each one with a concrete QA example. The throughline to stress: nothing here replaces the model from the LLM slide, each era is just a smarter way of feeding it. Prompting is what you say, context is what you show it, loop is letting it act and correct. Say the words ask, inform, iterate out loud, that trio is the spine they should walk out remembering. If someone in the room has read about this recently and asks if the terms have moved on: yes, "prompt engineering" and "context engineering" are the actual industry terms for eras 1 and 2, and this third era is increasingly called "harness engineering," building the whole system around the model (tools, memory, verification, orchestration), not just the loop. "Loop" here is the plain-language version of that.</aside>
   </section>
 
-  <!-- 7 · Era 1: Prompting -->
-  <section class="slide" data-index="7" data-act="2">
+  <!-- 8 · Era 1: Prompting -->
+  <section class="slide" data-index="8" data-act="2">
     <div class="slide-inner">
       <p class="eyebrow">Era 1 &middot; Prompting</p>
       <h2 class="headline">The discipline of asking well.</h2>
@@ -354,8 +530,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>The contractor analogy does the work here, lean on it: you would never tell a new contractor just "fix the kitchen", you would say what, to what standard, by when. Same with a model. These five chips are the anatomy of a good prompt, you do not need all five every time, but naming them demystifies the phrase "prompt engineering", it is not a dark art, it is clear briefing. Next slide shows it on a real QA task.</aside>
   </section>
 
-  <!-- 8 · Prompt example (before/after) -->
-  <section class="slide" data-index="8" data-act="2">
+  <!-- 9 · Prompt example (before/after) -->
+  <section class="slide" data-index="9" data-act="2">
     <div class="slide-inner">
       <p class="eyebrow">Era 1 &middot; In practice</p>
       <h2 class="headline">Same task. Two prompts.</h2>
@@ -374,8 +550,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>Read the "before" prompt aloud in a flat voice, then the "after" with intent, the difference is audible. Point out that nothing on the right is technical: a role, a clear task, the checks you care about, and the exact output shape. That is a prompt a QA analyst is already qualified to write, because it is really a well-specified test-review request. If someone says "so it is just being specific", agree enthusiastically, that is exactly the skill.</aside>
   </section>
 
-  <!-- 9 · Era 2: Context -->
-  <section class="slide" data-index="9" data-act="2">
+  <!-- 10 · Era 2: Context -->
+  <section class="slide" data-index="10" data-act="2">
     <div class="slide-inner">
       <p class="eyebrow">Era 2 &middot; Context</p>
       <h2 class="headline">Bring the right facts to the moment.</h2>
@@ -393,8 +569,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>Define the one acronym on the slide out loud: RAG just means the system fetches relevant documents and hands them to the model alongside your question, retrieval-augmented generation, but you can honestly just say "it looks things up first". The analogy that lands: a new hire who is brilliant but has not been given the wiki login. Same model, transformed output, purely because of what you put in front of it. Context engineering as a named discipline emerged mid-2025, Karpathy popularised the phrase, Anthropic formalised it that September, you do not need those names on the slide unless asked.</aside>
   </section>
 
-  <!-- 10 · Context example -->
-  <section class="slide" data-index="10" data-act="2">
+  <!-- 11 · Context example -->
+  <section class="slide" data-index="11" data-act="2">
     <div class="slide-inner">
       <p class="eyebrow">Era 2 &middot; In practice</p>
       <h2 class="headline">Grounded beats clever.</h2>
@@ -416,8 +592,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>This is the slide that makes context engineering concrete for a BI and QA room, because everyone has debugged a failed load. The left answer is not wrong, it is just useless: it is what you would get from a model with no access. The right answer names the row and points at a prior ticket, because those things were in front of it. Stress that nobody wrote a cleverer prompt here, they just fed it the evidence. That is the whole move.</aside>
   </section>
 
-  <!-- 11 · Era 3: Loop / agents -->
-  <section class="slide" data-index="11" data-act="2">
+  <!-- 12 · Era 3: Loop / agents -->
+  <section class="slide" data-index="12" data-act="2">
     <div class="slide-inner">
       <p class="eyebrow">Era 3 &middot; Loop</p>
       <h2 class="headline">Let it use tools and check its own work.</h2>
@@ -438,8 +614,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>This is the conceptual peak of the talk, the payoff of the "guesser on repeat" idea: the same loop, but now the model can act between guesses. Walk the cycle once slowly: it plans a step, uses a tool like running a script or querying a database, reads what came back including errors, and decides if it is finished. If not, it goes round again. Anthropic and others define an agent roughly this way, a model driving its own tool-use loop. The crucial bit for this room is the exit: done means hand it to a human, not ship it. Next slide is a real QA run.</aside>
   </section>
 
-  <!-- 12 · Loop example -->
-  <section class="slide" data-index="12" data-act="2">
+  <!-- 13 · Loop example -->
+  <section class="slide" data-index="13" data-act="2">
     <div class="slide-inner">
       <p class="eyebrow">Era 3 &middot; In practice</p>
       <h2 class="headline">One task, start to finish.</h2>
@@ -463,8 +639,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>Keep this concrete and grounded, it deliberately mirrors real reconciliation work rather than a toy example. The story: you give one instruction, and the agent does the mechanical middle, reading extracts, writing and running the comparison, catching a mismatch, and even reasoning about whether it is a genuine defect or just a truncated field. What it does not do is decide the release is clean, that green box, the human sign-off, stays yours. This is the shape of the tool I will demo right after. Do not over-claim, say "this is the pattern", not "this replaces you".</aside>
   </section>
 
-  <!-- 13 · Human-in-the-loop -->
-  <section class="slide deep" data-index="13" data-act="2">
+  <!-- 14 · Human-in-the-loop -->
+  <section class="slide deep" data-index="14" data-act="2">
     <div class="slide-inner">
       <p class="eyebrow">Act II &middot; The checkpoint</p>
       <h2 class="headline">The checkpoint is the point.</h2>
@@ -482,8 +658,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>This is the slide aimed squarely at the managers and the quality-engineering leaders in the room, so slow down here. The message they need: speed does not remove the control, it raises the stakes on where you put it. Autopilot did not remove pilots, it moved the human to the decisions that matter. In regulated or audit-sensitive work, a designed checkpoint is not friction, it is the governance. If leadership is nervous about AI, this is the reassurance: adoption and control are the same design decision, and QE is exactly who should own it.</aside>
   </section>
 
-  <!-- 14 · Tool landscape -->
-  <section class="slide" data-index="14" data-act="3">
+  <!-- 15 · Tool landscape -->
+  <section class="slide" data-index="15" data-act="3">
     <div class="slide-inner">
       <p class="eyebrow">Act III &middot; The landscape</p>
       <h2 class="headline">The tools, in one view.</h2>
@@ -500,8 +676,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>Do not read all six cards, let them scan. Give the organizing idea instead: top row is assistants you open and chat with, middle row lives inside a developer's editor, bottom row is agents that take actions and the kits to build your own. The one distinction worth saying aloud is assistant versus agent: an assistant answers, an agent acts. Everything in this space is sliding from the first toward the second. If asked "which should we use", say it depends on the task, which is exactly the next slide about models.</aside>
   </section>
 
-  <!-- 15 · Model landscape -->
-  <section class="slide" data-index="15" data-act="3">
+  <!-- 16 · Model landscape -->
+  <section class="slide" data-index="16" data-act="3">
     <div class="slide-inner">
       <p class="eyebrow">Act III &middot; The models</p>
       <h2 class="headline">One knob: depth vs speed vs cost.</h2>
@@ -517,8 +693,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>The trap with models is version-number soup, so refuse to play, the numbers change monthly and none of it matters to this audience. Give them the durable mental model instead: every provider offers the same shape, a deep tier for hard problems, a balanced tier that does most real work, a fast cheap tier for volume, plus open models you can run in-house for data control. The skill is matching model to task, using the deepest, priciest model for a trivial job is like renting a truck to buy milk. That framing survives every future release.</aside>
   </section>
 
-  <!-- 16 · AI in BI & QA -->
-  <section class="slide" data-index="16" data-act="3">
+  <!-- 17 · AI in BI & QA -->
+  <section class="slide" data-index="17" data-act="3">
     <div class="slide-inner">
       <p class="eyebrow">Act III &middot; Closer to home</p>
       <h2 class="headline">It's already in the BI and QA stack.</h2>
@@ -532,8 +708,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>This is the "this is not hypothetical" slide, the tools your BI counterparts already touch have AI inside them today. Keep the three cards to one line each, define DAX quickly if needed, it is the formula language in Power BI. Then pivot to testing: Gartner naming a category called AI-augmented software testing tells you this is a recognised market, not a fad, key names in it include agentic test generation and self-healing tests that repair themselves when the UI changes. Land on the division of labour, it sets up the next slide: machines do the repetitive checks, people do the thinking.</aside>
   </section>
 
-  <!-- 17 · Where this is heading -->
-  <section class="slide" data-index="17" data-act="3">
+  <!-- 18 · Where this is heading -->
+  <section class="slide" data-index="18" data-act="3">
     <div class="slide-inner">
       <p class="eyebrow">Act III &middot; Trajectory</p>
       <h2 class="headline">Where this is heading.</h2>
@@ -551,8 +727,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>Frame this as a spectrum, not a set of dates, avoid promising timelines you cannot defend. Near term is just better versions of what we saw today, in tools you already own. Medium term is those agent loops running longer chains unattended between checkpoints. Long term is whole workflows automated with humans supervising. The amber card on the right is deliberate and it is the reassuring one: across all three horizons, the human owning judgment and sign-off does not move. That is the through-line for anyone in the room worried about being automated away, the work changes shape, the judgment stays.</aside>
   </section>
 
-  <!-- 18 · What this means for QA -->
-  <section class="slide deep" data-index="18" data-act="4">
+  <!-- 19 · What this means for QA -->
+  <section class="slide deep" data-index="19" data-act="4">
     <div class="slide-inner">
       <p class="eyebrow">Act IV &middot; For our work</p>
       <h2 class="headline">Three shifts in the role.</h2>
@@ -566,8 +742,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>This is the emotional core for the analysts, deliver it looking at them, not the slides. Reframe each shift as a step up: from typing test cases to directing and reviewing them, from running checks to designing where the human control points sit, from being a tool operator to being the person who owns what quality means. None of the three shifts is "you get replaced", every one moves you up the value chain toward judgment. The last line matters, say it plainly: this is a promotion in the shape of the work, provided we lean into the judgment half.</aside>
   </section>
 
-  <!-- 19 · The build (framing) -->
-  <section class="slide" data-index="19" data-act="4">
+  <!-- 20 · The build (framing) -->
+  <section class="slide" data-index="20" data-act="4">
     <div class="slide-inner">
       <p class="eyebrow">Act IV &middot; What I've been building</p>
       <h2 class="headline">Which brings me to the demo.</h2>
@@ -582,8 +758,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>Keep this generic and short, no internal data on screen, this slide only exists to bridge into the live demo. Map the three layers back to the three eras explicitly: standards is context, automation is the loop, evidence is what makes a human sign-off fast. The phrase to use is "a pipeline, not a task", it is the same idea as the very first slide title. Do not go deep here, the demo carries the detail. One sentence of setup, then switch to the laptop.</aside>
   </section>
 
-  <!-- 20 · The build (handoff) -->
-  <section class="slide center" data-index="20" data-act="4">
+  <!-- 21 · The build (handoff) -->
+  <section class="slide center" data-index="21" data-act="4">
     <div class="slide-inner">
       <p class="eyebrow">Act IV &middot; Live</p>
       <h2 class="headline">Let me show you.</h2>
@@ -598,8 +774,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     <aside class="notes" hidden>This is the pivot to the laptop, so it is deliberately almost empty, do not add content. Say one framing sentence: "keep an eye on two things, how little I type, and where I stop and check". That primes them to notice the instruction-versus-execution split and the human checkpoint, the two ideas the whole talk built. Then switch inputs and run the demo. Come back to slide 21 to close after the demo if you have time, or close from the demo directly.</aside>
   </section>
 
-  <!-- 21 · Close -->
-  <section class="slide deep center" data-index="21" data-act="4">
+  <!-- 22 · Close -->
+  <section class="slide deep center" data-index="22" data-act="4">
     <svg class="arc-sig" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <path class="arc-line" d="M110,632 C470,612 780,548 1012,150" />
       <circle class="arc-now" cx="1012" cy="150" r="7" />
@@ -618,7 +794,7 @@ body.notes-open .notes-panel { transform:translateY(0); }
 <footer class="chrome">
   <div class="act-label" id="actLabel">AI Landscape &middot; 2026</div>
   <div class="rail" id="rail"><div class="rail-track"></div></div>
-  <div class="counter" id="counter">1 / 21</div>
+  <div class="counter" id="counter">1 / 22</div>
 </footer>
 
 <div class="notes-panel" id="notesPanel">
@@ -628,7 +804,7 @@ body.notes-open .notes-panel { transform:translateY(0); }
 
 <script>
 (function () {
-  var TOTAL_PLANNED = 21;
+  var TOTAL_PLANNED = 22;
   var ACT_NAMES = [
     "AI Landscape · 2026",
     "Act I · Foundations",
@@ -636,7 +812,7 @@ body.notes-open .notes-panel { transform:translateY(0); }
     "Act III · Landscape & Trajectory",
     "Act IV · What This Means"
   ];
-  var ACT_BOUNDARIES = [6, 14, 18];
+  var ACT_BOUNDARIES = [7, 15, 19];
 
   var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
   var current = 0;
@@ -666,6 +842,8 @@ body.notes-open .notes-panel { transform:translateY(0); }
     dot.style.left = (index / TOTAL_PLANNED * 100) + "%";
     var notes = slide.querySelector(".notes");
     notesTextEl.textContent = notes ? notes.textContent : "";
+    var animEl = slide.querySelector(".anim-on-enter");
+    if (animEl) { animEl.classList.remove("go"); void animEl.offsetWidth; animEl.classList.add("go"); }
   }
 
   var lastNav = 0;
