@@ -205,6 +205,24 @@ p.sec-label.new { color:var(--accent); margin:0 0 14px; }
 .chip { padding:9px 15px; border:1px solid var(--card-line); background:var(--card); color:var(--card-ink); border-radius:999px; font-size:clamp(13px,1.3vw,16px); font-weight:600; }
 .chip small { font-weight:400; color:var(--muted); }
 
+/* ---------- prompt-anatomy icon grid (slide 8): one distinct icon per named piece, cards cascade in ---------- */
+.icon-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:16px; margin-top:26px; }
+.icon-grid > * { min-width:0; }
+.icard { display:flex; flex-direction:column; align-items:center; text-align:center; padding:18px 10px;
+  background:var(--card); border:1px solid var(--card-line); border-radius:14px; }
+.icard svg { width:44px; height:44px; margin-bottom:10px; }
+.icard .lbl { font-weight:700; font-size:15px; color:var(--card-ink); margin:0 0 4px; }
+.icard .desc { font-size:12.5px; color:var(--muted); line-height:1.35; margin:0; }
+.icon-grid .icard { opacity:1; }
+@media (max-width:820px){ .icon-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (prefers-reduced-motion: no-preference) {
+  .icon-grid.go .icard { opacity:0; transform:translateY(10px); animation:iCardIn .4s cubic-bezier(.22,.61,.36,1) forwards; }
+  .icon-grid .i1 { animation-delay:.05s!important; } .icon-grid .i2 { animation-delay:.22s!important; }
+  .icon-grid .i3 { animation-delay:.39s!important; } .icon-grid .i4 { animation-delay:.56s!important; }
+  .icon-grid .i5 { animation-delay:.73s!important; }
+}
+@keyframes iCardIn { to { opacity:1; transform:translateY(0); } }
+
 /* ---------- code blocks (before/after prompts) ---------- */
 .code-pair { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-top:16px; }
 .code-pair > div { min-width:0; }
@@ -516,18 +534,58 @@ body.notes-open .notes-panel { transform:translateY(0); }
   <section class="slide" data-index="8" data-act="2">
     <div class="slide-inner">
       <p class="eyebrow">Era 1 &middot; Prompting</p>
-      <h2 class="headline">The discipline of asking well.</h2>
+      <h2 class="headline">The anatomy of a good ask.</h2>
       <div class="tick"></div>
-      <p class="body-text">Like briefing a sharp new contractor: same person, wildly different results depending on how clearly you set the task. Prompt engineering is writing the instruction so the model knows the goal, the format, and what "good" looks like, before it starts guessing.</p>
-      <div class="chips">
-        <span class="chip">Role <small>who it should act as</small></span>
-        <span class="chip">Task <small>the actual goal</small></span>
-        <span class="chip">Constraints <small>what to avoid</small></span>
-        <span class="chip">Format <small>how to answer</small></span>
-        <span class="chip">Example <small>one done right</small></span>
+      <p class="body-text">A recipe with no measurements guesses at everything: how much salt, how long to bake. Name the ingredients and the method precisely, and any two cooks land on the same dish. A good prompt works the same way, five named pieces instead of one vague ask.</p>
+      <div class="icon-grid anim-on-enter">
+        <div class="icard i1">
+          <svg viewBox="0 0 56 56" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round">
+            <circle cx="28" cy="19" r="9"/>
+            <path d="M12 46c0-10 7-16 16-16s16 6 16 16"/>
+          </svg>
+          <p class="lbl">Role</p>
+          <p class="desc">who it should act as</p>
+        </div>
+        <div class="icard i2">
+          <svg viewBox="0 0 56 56" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="16" y1="8" x2="16" y2="48"/>
+            <path d="M16 11 L42 18 L16 25 Z" fill="var(--accent)" stroke="none"/>
+          </svg>
+          <p class="lbl">Task</p>
+          <p class="desc">the actual goal</p>
+        </div>
+        <div class="icard i3">
+          <svg viewBox="0 0 56 56" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round">
+            <line x1="9" y1="18" x2="47" y2="18"/>
+            <line x1="16" y1="18" x2="16" y2="43"/>
+            <line x1="28" y1="18" x2="28" y2="43"/>
+            <line x1="40" y1="18" x2="40" y2="43"/>
+          </svg>
+          <p class="lbl">Constraints</p>
+          <p class="desc">what to avoid</p>
+        </div>
+        <div class="icard i4">
+          <svg viewBox="0 0 56 56" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="10" y="12" width="36" height="32" rx="4"/>
+            <line x1="10" y1="23" x2="46" y2="23" stroke-width="2.5"/>
+            <line x1="10" y1="33" x2="46" y2="33" stroke-width="2.5"/>
+            <line x1="28" y1="12" x2="28" y2="44" stroke-width="2.5"/>
+          </svg>
+          <p class="lbl">Format</p>
+          <p class="desc">how to answer</p>
+        </div>
+        <div class="icard i5">
+          <svg viewBox="0 0 56 56" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="28" cy="28" r="18"/>
+            <path d="M19 28l6 6 12-13" stroke-width="3.5"/>
+          </svg>
+          <p class="lbl">Example</p>
+          <p class="desc">one done right</p>
+        </div>
       </div>
+      <p class="flow-cap">You don't need all five every time, but naming them turns "prompt engineering" into clear briefing.</p>
     </div>
-    <aside class="notes" hidden>The contractor analogy does the work here, lean on it: you would never tell a new contractor just "fix the kitchen", you would say what, to what standard, by when. Same with a model. These five chips are the anatomy of a good prompt, you do not need all five every time, but naming them demystifies the phrase "prompt engineering", it is not a dark art, it is clear briefing. Next slide shows it on a real QA task.</aside>
+    <aside class="notes" hidden>The recipe analogy does the work here, lean on it: a recipe with vague or missing measurements gets a different dish every time, name the ingredients and the method precisely and any cook lands on the same result. Same with a model. Walk the five icons left to right as you name them: who it should act as (Role), the actual goal (Task), what to avoid (Constraints), how to answer (Format), what "good" looks like (Example). You do not need all five every time, but naming them demystifies the phrase "prompt engineering", it is not a dark art, it is clear briefing. Next slide shows it on a real QA task.</aside>
   </section>
 
   <!-- 9 · Prompt example (before/after) -->
