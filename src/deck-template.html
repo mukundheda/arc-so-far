@@ -277,6 +277,85 @@ p.sec-label.new { color:var(--accent); margin:0 0 14px; }
 @keyframes groundPulse { 40% { box-shadow:0 0 0 10px rgba(5,150,105,.18); } 100% { box-shadow:0 0 0 0 rgba(5,150,105,0); } }
 @keyframes connIn { to { transform:translate(-50%,-50%) scale(1); } }
 
+/* ---------- agent loop + run log (slide 12) ----------
+   A real going-round loop (four nodes + a loop-back arc) sits on top, so it reads as a loop. Below it, a
+   line-by-line run log writes out what happened at each step, in time with a highlight travelling the loop
+   twice (Loop 1 fails, Loop 2 passes). The log PERSISTS - every line stays - so the audience can read the
+   whole history at their own pace, which the spinning loop alone could not convey.
+   Baseline (reduced-motion / no-JS) renders the full loop + full log statically. */
+.loop-wrap { margin-top:10px; }
+.loop-diagram { max-width:720px; margin-top:0; }
+.loop-diagram .la-lbl { fill:var(--accent); font-family:var(--sans); font-size:13px; font-weight:600; letter-spacing:.03em; }
+
+/* the run log as a clean console panel: monospace step column, aligned values, section dividers, status ticks */
+.loop-log { max-width:592px; margin-top:16px; padding:2px 22px 14px; background:#fff;
+  border:1px solid var(--line); border-radius:12px; box-shadow:0 1px 2px rgba(15,23,42,.04); }
+.loop-log .ll-gh { margin:0; padding:13px 0 9px; font-size:10.5px; font-weight:800; letter-spacing:.13em;
+  text-transform:uppercase; border-bottom:1px solid var(--line); }
+.loop-log .ll-gh1 { color:var(--muted); }
+.loop-log .ll-gh2 { color:var(--accent); }
+.loop-log .ll-line { display:grid; grid-template-columns:120px 1fr; align-items:baseline; column-gap:14px;
+  padding:7px 0; font-size:14px; line-height:1.35; }
+.loop-log .ll-step { font-family:var(--mono); font-size:12px; color:var(--muted); }
+.loop-log .ll-val { color:var(--ink); font-weight:600; }
+.loop-log .ll-line.bad .ll-val { color:var(--bad); }
+.loop-log .ll-line.good .ll-val { color:var(--accent); }
+.loop-log .ll-line.bad .ll-val::before { content:"\2717\00a0\00a0"; font-weight:700; }
+.loop-log .ll-line.good .ll-val::before { content:"\2713\00a0\00a0"; font-weight:700; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* the loop skeleton draws in quickly first */
+  .loop-wrap.go .lb1, .loop-wrap.go .lb2, .loop-wrap.go .lb3, .loop-wrap.go .lb4 { opacity:0; transform:translateY(6px); }
+  .loop-wrap.go .lb1 { animation:dBoxIn .35s ease 0.00s forwards; }
+  .loop-wrap.go .lb2 { animation:dBoxIn .35s ease 0.25s forwards; }
+  .loop-wrap.go .lb3 { animation:dBoxIn .35s ease 0.50s forwards; }
+  .loop-wrap.go .lb4 { animation:dBoxIn .35s ease 0.75s forwards; }
+
+  .loop-diagram .la1, .loop-diagram .la2, .loop-diagram .la3, .loop-diagram .laloop { stroke-dasharray:1; stroke-dashoffset:1; }
+  .loop-wrap.go .la1 { animation:drawArc .3s ease 0.20s forwards; }
+  .loop-wrap.go .la2 { animation:drawArc .3s ease 0.45s forwards; }
+  .loop-wrap.go .la3 { animation:drawArc .3s ease 0.70s forwards; }
+  .loop-wrap.go .laloop { animation:drawArc .5s ease 0.95s forwards, lpArrowPulse .6s ease 4.75s; }
+
+  .loop-diagram .lah1, .loop-diagram .lah2, .loop-diagram .lah3, .loop-diagram .lahloop, .loop-diagram .la-lbl { opacity:0; }
+  .loop-wrap.go .lah1 { animation:hopIn .18s ease 0.45s forwards; }
+  .loop-wrap.go .lah2 { animation:hopIn .18s ease 0.70s forwards; }
+  .loop-wrap.go .lah3 { animation:hopIn .18s ease 0.95s forwards; }
+  .loop-wrap.go .lahloop { animation:hopIn .18s ease 1.40s forwards; }
+  .loop-wrap.go .la-lbl { animation:hopIn .3s ease 1.60s forwards; }
+
+  /* the travelling highlight: each node's border pulses as the flow reaches it - once for Loop 1, once for Loop 2 (~0.75s per step) */
+  .loop-wrap.go .lb1 rect { animation:lpNodeOn .5s ease 1.95s, lpNodeOn .5s ease 5.30s; }
+  .loop-wrap.go .lb2 rect { animation:lpNodeOn .5s ease 2.70s, lpNodeOn .5s ease 6.05s; }
+  .loop-wrap.go .lb3 rect { animation:lpNodeOn .5s ease 3.45s, lpNodeOn .5s ease 6.80s; }
+  .loop-wrap.go .lb4 rect { animation:lpNodeOn .5s ease 4.20s, lpNodeOn .5s ease 7.55s; }
+
+  /* the run log writes out in step, each line staying put once shown */
+  .loop-log .ll-gh, .loop-log .ll-line { opacity:0; }
+  .loop-log .ll-line { transform:translateX(-6px); }
+  .loop-wrap.go .ll-gh1 { animation:hopIn .3s ease 1.80s forwards; }
+  .loop-wrap.go .ll-1 { animation:llIn .35s ease 2.05s forwards; }
+  .loop-wrap.go .ll-2 { animation:llIn .35s ease 2.80s forwards; }
+  .loop-wrap.go .ll-3 { animation:llIn .35s ease 3.55s forwards; }
+  .loop-wrap.go .ll-4 { animation:llIn .35s ease 4.30s forwards; }
+  .loop-wrap.go .ll-gh2 { animation:hopIn .3s ease 5.15s forwards; }
+  .loop-wrap.go .ll-5 { animation:llIn .35s ease 5.40s forwards; }
+  .loop-wrap.go .ll-6 { animation:llIn .35s ease 6.15s forwards; }
+  .loop-wrap.go .ll-7 { animation:llIn .35s ease 6.90s forwards; }
+  .loop-wrap.go .ll-8 { animation:llIn .35s ease 7.65s forwards; }
+}
+@keyframes llIn { to { opacity:1; transform:translateX(0); } }
+@keyframes lpNodeOn {
+  0%   { stroke:var(--card-line); stroke-width:1.5; }
+  40%  { stroke:var(--accent); stroke-width:3; }
+  100% { stroke:var(--card-line); stroke-width:1.5; }
+}
+@keyframes lpArrowPulse {
+  0%   { stroke:var(--muted); stroke-width:1.6; }
+  40%  { stroke:var(--accent); stroke-width:2.8; }
+  100% { stroke:var(--muted); stroke-width:1.6; }
+}
+
 /* ---------- two-column compare cards ---------- */
 .cols { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:22px; }
 .cols > * { min-width:0; }
@@ -304,6 +383,13 @@ p.sec-label.new { color:var(--accent); margin:0 0 14px; }
 .col.vivid .out { color:#022c22; opacity:.8; }
 .col.vivid .col-badge { background:#022c22; }
 .col.vivid .col-badge svg { stroke:var(--deep-accent); }
+
+/* ---------- flat/vivid entrance (slide 11): the plain guess lands, then a beat later the grounded answer lands ---------- */
+.reveal-cols .col { opacity:1; }
+@media (prefers-reduced-motion: no-preference) {
+  .reveal-cols.go .col.flat { opacity:0; transform:translateY(10px); animation:vCardIn .4s ease .05s forwards; }
+  .reveal-cols.go .col.vivid { opacity:0; transform:translateY(10px); animation:vCardIn .4s ease .4s forwards; }
+}
 
 /* ---------- verify-reveal cards (hallucination slide): two answers look identical until the reveal ---------- */
 .verify-prompt { font-size:14px; color:var(--muted); font-weight:600; margin:20px 0 10px; }
@@ -724,7 +810,7 @@ body.notes-open .notes-panel { transform:translateY(0); }
       <p class="eyebrow">Era 2 &middot; In practice</p>
       <h2 class="headline">Grounded beats clever.</h2>
       <p class="body-text tight" style="margin-bottom:4px;">Ask: <em>"Why did last night's data load fail?"</em></p>
-      <div class="cols">
+      <div class="cols reveal-cols anim-on-enter">
         <div class="col flat">
           <div class="col-badge">
             <svg viewBox="0 0 56 56" fill="none" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
@@ -761,20 +847,48 @@ body.notes-open .notes-panel { transform:translateY(0); }
       <p class="eyebrow">Era 3 &middot; Loop</p>
       <h2 class="headline">Let it use tools and check its own work.</h2>
       <div class="tick"></div>
-      <p class="body-text tight">The difference between an assistant who hands you a draft, and one who runs the query, reads the error, fixes it, and only then brings you the result. An <strong>agent</strong> is a model in a loop: it can act, see what came back, judge whether it is done, and iterate.</p>
-      <svg class="svg-diagram" viewBox="0 0 800 172" role="img" aria-label="Agent loop: plan, call a tool, read the result, check if done, loop back or hand off.">
-        <rect class="d-rect" x="6" y="30" width="150" height="50" rx="10"/><text class="d-txt" x="81" y="61" text-anchor="middle">plan</text>
-        <line class="d-arrow" x1="160" y1="55" x2="200" y2="55"/><polygon class="d-arrow-head" points="200,50 210,55 200,60"/>
-        <rect class="d-rect" x="214" y="30" width="150" height="50" rx="10"/><text class="d-txt" x="289" y="61" text-anchor="middle">call a tool</text>
-        <line class="d-arrow" x1="368" y1="55" x2="408" y2="55"/><polygon class="d-arrow-head" points="408,50 418,55 408,60"/>
-        <rect class="d-rect" x="422" y="30" width="150" height="50" rx="10"/><text class="d-txt" x="497" y="61" text-anchor="middle">read result</text>
-        <line class="d-arrow" x1="576" y1="55" x2="616" y2="55"/><polygon class="d-arrow-head" points="616,50 626,55 616,60"/>
-        <rect class="d-rect solid" x="630" y="30" width="164" height="50" rx="10"/><text class="d-txt on-solid" x="712" y="61" text-anchor="middle">check: done?</text>
-        <path class="d-arrow" d="M712,80 C712,132 81,132 81,82"/><polygon class="d-arrow-head" points="76,92 81,80 86,92"/>
-        <text class="d-loop-lbl" x="396" y="152" text-anchor="middle">not done? loop again &nbsp;&middot;&nbsp; done? hand it to a human</text>
-      </svg>
+      <p class="body-text tight">An <strong>agent</strong> is a model in a loop: it acts with a tool, reads what came back, and checks whether it is done. If not, it goes round again. Here it is fixing a failing login test.</p>
+      <div class="loop-wrap anim-on-enter">
+        <svg class="svg-diagram loop-diagram" viewBox="0 0 800 138" role="img" aria-label="A loop of four steps: plan, call a tool, read result, check done, with an arrow looping from check back to plan. The run log below records each pass.">
+          <g class="lb1">
+            <rect class="d-rect" x="6" y="8" width="176" height="50" rx="10"/>
+            <text class="d-txt" x="94" y="38" text-anchor="middle">plan</text>
+          </g>
+          <line class="d-arrow la1" pathLength="1" x1="186" y1="33" x2="222" y2="33"/><polygon class="d-arrow-head lah1" points="222,28 232,33 222,38"/>
+          <g class="lb2">
+            <rect class="d-rect" x="236" y="8" width="176" height="50" rx="10"/>
+            <text class="d-txt" x="324" y="38" text-anchor="middle">call a tool</text>
+          </g>
+          <line class="d-arrow la2" pathLength="1" x1="416" y1="33" x2="452" y2="33"/><polygon class="d-arrow-head lah2" points="452,28 462,33 452,38"/>
+          <g class="lb3">
+            <rect class="d-rect" x="466" y="8" width="176" height="50" rx="10"/>
+            <text class="d-txt" x="554" y="38" text-anchor="middle">read result</text>
+          </g>
+          <line class="d-arrow la3" pathLength="1" x1="646" y1="33" x2="682" y2="33"/><polygon class="d-arrow-head lah3" points="682,28 692,33 682,38"/>
+          <g class="lb4">
+            <rect class="d-rect" x="696" y="8" width="98" height="50" rx="10"/>
+            <text class="d-txt" x="745" y="38" text-anchor="middle">check: done?</text>
+          </g>
+          <!-- loop-back arc: check -> plan -->
+          <path class="d-arrow laloop" pathLength="1" d="M745,58 C745,98 94,98 94,60"/>
+          <polygon class="d-arrow-head lahloop" points="89,70 94,58 99,70"/>
+          <text class="la-lbl" x="419" y="122" text-anchor="middle">not done? go round again &nbsp;&middot;&nbsp; done? hand it to a human</text>
+        </svg>
+        <div class="loop-log">
+          <p class="ll-gh ll-gh1">Loop 1 &middot; first attempt</p>
+          <div class="ll-line ll-1"><span class="ll-step">plan</span><span class="ll-val">add a null check</span></div>
+          <div class="ll-line ll-2"><span class="ll-step">call a tool</span><span class="ll-val">run the login test suite</span></div>
+          <div class="ll-line ll-3 bad"><span class="ll-step">read result</span><span class="ll-val">2 of 5 tests pass</span></div>
+          <div class="ll-line ll-4 bad"><span class="ll-step">check: done?</span><span class="ll-val">no, so loop back to plan</span></div>
+          <p class="ll-gh ll-gh2">Loop 2 &middot; retry</p>
+          <div class="ll-line ll-5"><span class="ll-step">plan</span><span class="ll-val">also add a timeout guard</span></div>
+          <div class="ll-line ll-6"><span class="ll-step">call a tool</span><span class="ll-val">run the login test suite</span></div>
+          <div class="ll-line ll-7 good"><span class="ll-step">read result</span><span class="ll-val">5 of 5 tests pass</span></div>
+          <div class="ll-line ll-8 good"><span class="ll-step">check: done?</span><span class="ll-val">yes, hand it to a human</span></div>
+        </div>
+      </div>
     </div>
-    <aside class="notes" hidden>This is the conceptual peak of the talk, the payoff of the "guesser on repeat" idea: the same loop, but now the model can act between guesses. Walk the cycle once slowly: it plans a step, uses a tool like running a script or querying a database, reads what came back including errors, and decides if it is finished. If not, it goes round again. Anthropic and others define an agent roughly this way, a model driving its own tool-use loop. The crucial bit for this room is the exit: done means hand it to a human, not ship it. Next slide is a real QA run.</aside>
+    <aside class="notes" hidden>This is the conceptual peak of the talk, the payoff of the "guesser on repeat" idea: the same loop, but now the model can act between guesses. The diagram up top is the loop itself, four steps with an arrow running from "check: done?" back to "plan". Below it, a run log writes out line by line what actually happened, in time with a highlight travelling the loop, and every line stays on screen so people can read the whole history. Walk it: Loop 1, it plans a fix (add a null check), runs the login test suite, only 2 of 5 pass, so it is not done and loops back. Loop 2, it plans a better fix (also a timeout guard), runs the suite again, all 5 pass, and hands off. The single point: it retried on its own, you did not tell it to. Anthropic and others define an agent roughly this way, a model driving its own tool-use loop. The crucial bit for this room is the exit: done means hand it to a human, not ship it. Next slide is a real QA run.</aside>
   </section>
 
   <!-- 13 · Loop example -->
