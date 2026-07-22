@@ -22,14 +22,14 @@ Works with a presentation clicker (they send PageUp/PageDown).
 
 ## Structure
 
-22 slides in four acts. The deck alternates **light** working slides with **deep-green** statement slides for rhythm; each slide's light/dark identity is fixed, so it looks the same on any screen regardless of the viewer's system theme.
+21 slides in four acts. The deck alternates **light** working slides with **deep-green** statement slides for rhythm; each slide's light/dark identity is fixed, so it looks the same on any screen regardless of the viewer's system theme.
 
 - **I - Foundations** (2-6): what AI was before ChatGPT, the transformer paper that made it possible, the moment, what an LLM is, why it hallucinates
 - **II - The Three Eras** (7-14): prompting, context, and loop/agents, each with a QA example, then human-in-the-loop
 - **III - Landscape & Trajectory** (15-18): the tool landscape, the model landscape, AI in BI/QA, where it's heading
-- **IV - What This Means** (19-22): three shifts in the QA role, the build, and the close
+- **IV - What This Means** (19-21): three shifts in the QA role, the build, and the close
 
-Deep (dark) slides: 1, 7, 11, 14, 19, 22. Everything else is light. The dark/light rhythm is under active review as part of an end-of-build visual pass (see git log) and this list may grow.
+Deep (dark) slides: 1, 7, 11, 14, 19, 21. Everything else is light. The dark/light rhythm is under active review as part of an end-of-build visual pass (see git log) and this list may grow.
 
 ## Edit it
 
@@ -64,4 +64,4 @@ vercel --prod
 ## Notes
 
 - Factual claims are sourced; citations live in the presenter notes (`s`) of the relevant slides.
-- Slides 20-21 (the build) are intentionally generic and hand off to a separate live demo.
+- Slide 20 (the build) is intentionally generic and hands off to a separate live demo.
