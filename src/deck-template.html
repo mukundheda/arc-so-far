@@ -116,6 +116,9 @@ p { margin:0; }
   .stages .s1 { animation-delay:.1s!important; } .stages .s2 { animation-delay:.4s!important; } .stages .s3 { animation-delay:.7s!important; }
 }
 .stage-flow { display:flex; align-items:center; gap:8px; margin-top:8px; font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:600; }
+@media (prefers-reduced-motion: no-preference) {
+  .stages.go ~ .stage-flow { opacity:0; animation:hopIn .4s ease 1.1s forwards; }
+}
 
 /* ---------- SVG diagrams ---------- */
 .svg-diagram { width:100%; max-width:760px; height:auto; margin-top:12px; }
@@ -373,25 +376,27 @@ p.sec-label.new { color:var(--accent); margin:0 0 14px; }
   display:flex; align-items:center; justify-content:center; color:var(--accent); }
 .handoff .person svg { width:30px; height:30px; }
 @media (prefers-reduced-motion: no-preference) {
+  /* typing is slowed down (~1.35s/line vs the old ~0.85s) and each line now holds fully-typed
+     for a 2s reading pause before it fades to the next - people need time to actually read it */
   .agent-run.go .sp { opacity:0; }
-  .agent-run.go .sp-1 { animation:hopIn .15s ease 0.10s forwards, typeReveal .9s steps(24,end) 0.10s forwards, spFade .25s ease 1.85s forwards; }
-  .agent-run.go .sp-2 { animation:hopIn .15s ease 1.85s forwards, typeReveal .85s steps(38,end) 1.85s forwards, spFade .25s ease 3.20s forwards; }
-  .agent-run.go .sp-3 { animation:hopIn .15s ease 3.20s forwards, typeReveal .85s steps(32,end) 3.20s forwards, spFade .25s ease 4.55s forwards; }
-  .agent-run.go .sp-4 { animation:hopIn .15s ease 4.55s forwards, typeReveal .85s steps(36,end) 4.55s forwards, spFade .25s ease 5.90s forwards; }
-  .agent-run.go .sp-5 { animation:hopIn .15s ease 5.90s forwards, typeReveal .85s steps(34,end) 5.90s forwards, spFade .25s ease 7.25s forwards; }
-  .agent-run.go .sp-6 { animation:hopIn .15s ease 7.25s forwards, typeReveal .85s steps(30,end) 7.25s forwards, spFade .25s ease 8.60s forwards; }
-  .agent-run.go .sp-7 { animation:hopIn .15s ease 8.60s forwards, typeReveal .7s steps(20,end) 8.60s forwards, spFade .3s ease 9.95s forwards; }
-  /* the screen crossfades one scene per narrated step */
+  .agent-run.go .sp-1 { animation:hopIn .15s ease 0.10s forwards, typeReveal 1.44s steps(24,end) 0.10s forwards, spFade .25s ease 3.54s forwards; }
+  .agent-run.go .sp-2 { animation:hopIn .15s ease 3.54s forwards, typeReveal 1.36s steps(38,end) 3.54s forwards, spFade .25s ease 6.90s forwards; }
+  .agent-run.go .sp-3 { animation:hopIn .15s ease 6.90s forwards, typeReveal 1.36s steps(32,end) 6.90s forwards, spFade .25s ease 10.26s forwards; }
+  .agent-run.go .sp-4 { animation:hopIn .15s ease 10.26s forwards, typeReveal 1.36s steps(36,end) 10.26s forwards, spFade .25s ease 13.62s forwards; }
+  .agent-run.go .sp-5 { animation:hopIn .15s ease 13.62s forwards, typeReveal 1.36s steps(34,end) 13.62s forwards, spFade .25s ease 16.98s forwards; }
+  .agent-run.go .sp-6 { animation:hopIn .15s ease 16.98s forwards, typeReveal 1.36s steps(30,end) 16.98s forwards, spFade .25s ease 20.34s forwards; }
+  .agent-run.go .sp-7 { animation:hopIn .15s ease 20.34s forwards, typeReveal 1.12s steps(20,end) 20.34s forwards, spFade .3s ease 23.46s forwards; }
+  /* the screen crossfades one scene per narrated step, in step with the slower speech timing above */
   .agent-run.go .scene { opacity:0; }
-  .agent-run.go .sc-1 { animation:hopIn .3s ease 0.10s forwards, spFade .3s ease 1.80s forwards; }
-  .agent-run.go .sc-2 { animation:hopIn .3s ease 1.85s forwards, spFade .3s ease 3.15s forwards; }
-  .agent-run.go .sc-3 { animation:hopIn .3s ease 3.20s forwards, spFade .3s ease 5.85s forwards; }
-  .agent-run.go .sc-4 { animation:hopIn .3s ease 5.90s forwards, spFade .3s ease 7.20s forwards; }
-  .agent-run.go .sc-5 { animation:hopIn .3s ease 7.25s forwards, spFade .3s ease 8.55s forwards; }
-  .agent-run.go .sc-6 { animation:hopIn .3s ease 8.60s forwards, spFade .3s ease 9.95s forwards; }
+  .agent-run.go .sc-1 { animation:hopIn .3s ease 0.10s forwards, spFade .3s ease 3.49s forwards; }
+  .agent-run.go .sc-2 { animation:hopIn .3s ease 3.54s forwards, spFade .3s ease 6.85s forwards; }
+  .agent-run.go .sc-3 { animation:hopIn .3s ease 6.90s forwards, spFade .3s ease 10.21s forwards; }
+  .agent-run.go .sc-4 { animation:hopIn .3s ease 10.26s forwards, spFade .3s ease 13.57s forwards; }
+  .agent-run.go .sc-5 { animation:hopIn .3s ease 13.62s forwards, spFade .3s ease 16.93s forwards; }
+  .agent-run.go .sc-6 { animation:hopIn .3s ease 16.98s forwards, spFade .3s ease 23.46s forwards; }
   /* inside the spreadsheet scene: the red mismatch row lands, then gets tagged as a truncation */
-  .agent-run.go .sc-3 .srow.bad { opacity:0; animation:hopIn .35s ease 3.55s forwards; }
-  .agent-run.go .sc-3 .trunc-tag { opacity:0; transform:translateY(4px); animation:agUp .35s ease 4.80s forwards; }
+  .agent-run.go .sc-3 .srow.bad { opacity:0; animation:hopIn .35s ease 7.25s forwards; }
+  .agent-run.go .sc-3 .trunc-tag { opacity:0; transform:translateY(4px); animation:agUp .35s ease 8.50s forwards; }
 }
 .agent-run .sp { opacity:0; }
 .agent-run .sp-7 { opacity:1; clip-path:inset(0 0 0 0); }
@@ -785,10 +790,10 @@ body.notes-open .notes-panel { transform:translateY(0); }
       <h2 class="headline">Three eras, one throughline.</h2>
       <div class="tick"></div>
       <p class="body-text">Each era kept the guesser from the last slide and got better at <em>feeding it the right input</em>. That is the whole plot of the next few minutes.</p>
-      <div class="stages">
-        <div class="stage"><div class="num">01</div><h3>Prompting</h3><p>Ask well. The discipline of the instruction itself.</p></div>
-        <div class="stage"><div class="num">02</div><h3>Context</h3><p>Bring the right facts to the model at the right moment.</p></div>
-        <div class="stage"><div class="num">03</div><h3>Loop</h3><p>Let it use tools, check its own work, and iterate. Agents.</p></div>
+      <div class="stages anim-on-enter">
+        <div class="stage s1"><div class="num">01</div><h3>Prompting</h3><p>Ask well. The discipline of the instruction itself.</p></div>
+        <div class="stage s2"><div class="num">02</div><h3>Context</h3><p>Bring the right facts to the model at the right moment.</p></div>
+        <div class="stage s3"><div class="num">03</div><h3>Loop</h3><p>Let it use tools, check its own work, and iterate. Agents.</p></div>
       </div>
       <div class="stage-flow" style="margin-top:24px;">
         <span>ask</span><span class="arrow" aria-hidden="true">&rarr;</span><span>inform</span><span class="arrow" aria-hidden="true">&rarr;</span><span>iterate</span>
@@ -995,7 +1000,7 @@ body.notes-open .notes-panel { transform:translateY(0); }
       <p class="eyebrow">Era 3 &middot; In practice</p>
       <h2 class="headline">Watch one work a real task.</h2>
       <p class="body-text tight" style="margin-bottom:2px;">Task: <em>reconcile production against test row counts.</em></p>
-      <div class="agent-run anim-on-enter" data-loop="10400">
+      <div class="agent-run anim-on-enter" data-loop="24200">
         <div class="agent-side">
           <div class="speech">
             <span class="sp sp-1">&ldquo;Pulling both extracts&hellip;&rdquo;</span>
@@ -1283,23 +1288,8 @@ One nuance worth knowing cold if asked: OpenAI's current generation is actually 
 Now the practical layer, since this is what the team actually needs walking out of here - which tier for which QA task, and how to decide without overthinking it every time. Default to Balanced for the vast majority of daily work: writing test cases from a spec, drafting bug reports, summarizing a long thread, reviewing straightforward PRs - Sonnet, Gemini 3.5 Flash, or Terra all live here and any of them is the right first choice. Reach for Deep only when Balanced visibly falls short - a confusing bug you can't reproduce, an ambiguous requirement that needs real judgment, a test plan for something genuinely novel; you'll know because the Balanced output will feel shallow or miss the nuance. Reserve Frontier for the rare, expensive case - a multi-hour autonomous investigation across systems, planning a full test-strategy overhaul - not everyday use, the cost difference is real and compounds fast at volume. Use Fast (Haiku, Luna) for anything you'd run hundreds of times: classifying incoming tickets, generating boilerplate assertions, a step inside a CI pipeline - cost per call matters more than peak quality there. Only reach for an Open/self-hosted model (Llama, DeepSeek, Qwen, Mistral, Gemma, GLM, Kimi K3) when there's a specific reason data can't leave the building - production PII in test data, a regulated environment, or volume so high that self-hosting is cheaper than API calls; otherwise it's added infrastructure most teams don't want to own. The one-sentence version if someone wants to write it down: start Balanced, escalate to Deep when it visibly isn't enough, save Frontier for genuinely hard problems, drop to Fast for anything repetitive, and only go Open when data residency forces your hand.</aside>
   </section>
 
-  <!-- 17 · AI in BI & QA -->
+  <!-- 17 · Where this is heading -->
   <section class="slide" data-index="17" data-act="3">
-    <div class="slide-inner">
-      <p class="eyebrow">Act III &middot; Closer to home</p>
-      <h2 class="headline">It's already in the BI and QA stack.</h2>
-      <div class="card-grid">
-        <div class="tcard"><p class="k">Power BI</p><h4>Copilot</h4><p>Ask a report in plain English; it drafts the DAX.</p></div>
-        <div class="tcard"><p class="k">Snowflake</p><h4>Cortex Analyst</h4><p>AI and natural-language query inside the warehouse.</p></div>
-        <div class="tcard"><p class="k">Tableau</p><h4>Pulse</h4><p>Define a metric; it pushes you insights and anomalies.</p></div>
-      </div>
-      <p class="body-text tight" style="margin-top:22px;">And in testing: "AI-augmented software testing" is now its own Gartner category, test generation from requirements, self-healing tests, and agentic runs. The consistent finding: AI takes the mechanical work, humans keep the exploratory and the judgment.</p>
-    </div>
-    <aside class="notes" hidden>This is the "this is not hypothetical" slide, the tools your BI counterparts already touch have AI inside them today. Keep the three cards to one line each, define DAX quickly if needed, it is the formula language in Power BI. Then pivot to testing: Gartner naming a category called AI-augmented software testing tells you this is a recognised market, not a fad, key names in it include agentic test generation and self-healing tests that repair themselves when the UI changes. Land on the division of labour, it sets up the next slide: machines do the repetitive checks, people do the thinking.</aside>
-  </section>
-
-  <!-- 18 · Where this is heading -->
-  <section class="slide" data-index="18" data-act="3">
     <div class="slide-inner">
       <p class="eyebrow">Act III &middot; Trajectory</p>
       <h2 class="headline">Where this is heading.</h2>
@@ -1319,8 +1309,8 @@ Now the practical layer, since this is what the team actually needs walking out 
     <aside class="notes" hidden>Frame this as a spectrum, not a set of dates, avoid promising timelines you cannot defend. Near term is just better versions of what we saw today, in tools you already own. Medium term is those agent loops running longer chains unattended between checkpoints. Long term is whole workflows automated with humans supervising. The amber card on the right is deliberate and it is the reassuring one: across all three horizons, the human owning judgment and sign-off does not move. That is the through-line for anyone in the room worried about being automated away, the work changes shape, the judgment stays.</aside>
   </section>
 
-  <!-- 19 · What this means for QA -->
-  <section class="slide deep" data-index="19" data-act="4">
+  <!-- 18 · What this means for QA -->
+  <section class="slide deep" data-index="18" data-act="4">
     <div class="slide-inner">
       <p class="eyebrow">Act IV &middot; For our work</p>
       <h2 class="headline">Three shifts in the role.</h2>
@@ -1334,8 +1324,8 @@ Now the practical layer, since this is what the team actually needs walking out 
     <aside class="notes" hidden>This is the emotional core for the analysts, deliver it looking at them, not the slides. Reframe each shift as a step up: from typing test cases to directing and reviewing them, from running checks to designing where the human control points sit, from being a tool operator to being the person who owns what quality means. None of the three shifts is "you get replaced", every one moves you up the value chain toward judgment. The last line matters, say it plainly: this is a promotion in the shape of the work, provided we lean into the judgment half.</aside>
   </section>
 
-  <!-- 20 · The build (framing) -->
-  <section class="slide" data-index="20" data-act="4">
+  <!-- 19 · The build (framing) -->
+  <section class="slide" data-index="19" data-act="4">
     <div class="slide-inner">
       <p class="eyebrow">Act IV &middot; What I've been building</p>
       <h2 class="headline">Which brings me to the demo.</h2>
@@ -1347,11 +1337,11 @@ Now the practical layer, since this is what the team actually needs walking out 
         <div class="layer y3"><div class="l-name">Evidence</div><div class="l-desc">The same clean summary, every run, ready for sign-off.</div></div>
       </div>
     </div>
-    <aside class="notes" hidden>Keep this generic and short, no internal data on screen, this slide only exists to bridge into the live demo. Map the three layers back to the three eras explicitly: standards is context, automation is the loop, evidence is what makes a human sign-off fast. The phrase to use is "a pipeline, not a task", it is the same idea as the very first slide title. Do not go deep here, the demo carries the detail. This is now the last slide before switching to the laptop - one sentence of setup ("keep an eye on two things: how little I type, and where I stop and check"), then run the live demo. Come back to slide 21 (the close) when the demo is done, or close verbally from the demo directly.</aside>
+    <aside class="notes" hidden>Keep this generic and short, no internal data on screen, this slide only exists to bridge into the live demo. Map the three layers back to the three eras explicitly: standards is context, automation is the loop, evidence is what makes a human sign-off fast. The phrase to use is "a pipeline, not a task", it is the same idea as the very first slide title. Do not go deep here, the demo carries the detail. This is now the last slide before switching to the laptop - one sentence of setup ("keep an eye on two things: how little I type, and where I stop and check"), then run the live demo. Come back to slide 20 (the close) when the demo is done, or close verbally from the demo directly.</aside>
   </section>
 
-  <!-- 21 · Close -->
-  <section class="slide deep center" data-index="21" data-act="4">
+  <!-- 20 · Close -->
+  <section class="slide deep center" data-index="20" data-act="4">
     <svg class="arc-sig anim-on-enter" viewBox="0 0 1280 720" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <path class="arc-line" pathLength="1" d="M110,632 C470,612 780,548 1012,150" />
       <circle class="arc-now" cx="1012" cy="150" r="7" />
@@ -1370,7 +1360,7 @@ Now the practical layer, since this is what the team actually needs walking out 
 <footer class="chrome">
   <div class="act-label" id="actLabel">AI Landscape &middot; 2026</div>
   <div class="rail" id="rail"><div class="rail-track"></div></div>
-  <div class="counter" id="counter">1 / 21</div>
+  <div class="counter" id="counter">1 / 20</div>
 </footer>
 
 <div class="notes-panel" id="notesPanel">
@@ -1380,7 +1370,7 @@ Now the practical layer, since this is what the team actually needs walking out 
 
 <script>
 (function () {
-  var TOTAL_PLANNED = 21;
+  var TOTAL_PLANNED = 20;
   var ACT_NAMES = [
     "AI Landscape · 2026",
     "Act I · Foundations",
@@ -1388,7 +1378,7 @@ Now the practical layer, since this is what the team actually needs walking out 
     "Act III · Landscape & Trajectory",
     "Act IV · What This Means"
   ];
-  var ACT_BOUNDARIES = [7, 15, 19];
+  var ACT_BOUNDARIES = [7, 15, 18];
 
   var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
   var current = 0;

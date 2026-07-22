@@ -22,14 +22,14 @@ Works with a presentation clicker (they send PageUp/PageDown).
 
 ## Structure
 
-21 slides in four acts. The deck alternates **light** working slides with **deep-green** statement slides for rhythm; each slide's light/dark identity is fixed, so it looks the same on any screen regardless of the viewer's system theme.
+20 slides in four acts. The deck alternates **light** working slides with **deep-green** statement slides for rhythm; each slide's light/dark identity is fixed, so it looks the same on any screen regardless of the viewer's system theme.
 
 - **I - Foundations** (2-6): what AI was before ChatGPT, the transformer paper that made it possible, the moment, what an LLM is, why it hallucinates
 - **II - The Three Eras** (7-14): prompting, context, and loop/agents, each with a QA example, then human-in-the-loop
-- **III - Landscape & Trajectory** (15-18): the tool landscape, the model landscape, AI in BI/QA, where it's heading
-- **IV - What This Means** (19-21): three shifts in the QA role, the build, and the close
+- **III - Landscape & Trajectory** (15-17): the tool landscape, the model landscape, where it's heading
+- **IV - What This Means** (18-20): three shifts in the QA role, the build, and the close
 
-Deep (dark) slides: 1, 7, 11, 14, 19, 21. Everything else is light. The dark/light rhythm is under active review as part of an end-of-build visual pass (see git log) and this list may grow.
+Deep (dark) slides: 1, 7, 11, 14, 18, 20. Everything else is light. The dark/light rhythm is under active review as part of an end-of-build visual pass (see git log) and this list may grow.
 
 ## Edit it
 
@@ -49,7 +49,7 @@ Two ways:
 
 - Background (light slides) `#fafaf9`, ink `#0f172a`, accent emerald `#059669`, mint cards `#d1fae5`
 - Deep slides `#022c22` with white ink and bright-mint `#6ee7b7` accents
-- One lone amber accent (`#c2740c`) marks the "always" horizon on slide 18
+- One lone amber accent (`#c2740c`) marks the "always" horizon on slide 17
 - Type: Inter (all weights embedded). Headings 700/800, body 400/500
 - Colors are CSS custom properties; deep slides just redefine the tokens locally, so any slide can be made light or dark by adding/removing `class="... deep"`
 
